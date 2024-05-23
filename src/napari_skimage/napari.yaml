@@ -12,9 +12,14 @@ contributions:
     - id: napari-skimage.make_gaussian_widget
       python_name: napari_skimage.skimage_filter_widget:gaussian_filter_widget
       title: Make gaussian filter widget
+    - id: napari-skimage.make_threshold_widget
+      python_name: napari_skimage.skimage_threshold_widget:threshold_widget
+      title: Make threshold widget
   widgets:
     - command: napari-skimage.make_farid_widget
       autogenerate: true
       display_name: Farid filter
     - command: napari-skimage.make_gaussian_widget
       display_name: Gaussian filter
+    - command: napari-skimage.make_threshold_widget
+      display_name: Threshold
