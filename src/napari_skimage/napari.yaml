@@ -15,6 +15,12 @@ contributions:
     - id: napari-skimage.make_threshold_widget
       python_name: napari_skimage.skimage_threshold_widget:threshold_widget
       title: Make threshold widget
+    - id: napari-skimage.make_binary_morphology_widget
+      python_name: napari_skimage.skimage_morphology_widget:binary_morphology_widget
+      title: Make binary morphology widget
+    - id: napari-skimage.make_connected_components_widget
+      python_name: napari_skimage.skimage_morphology_widget:connected_components_widget
+      title: Make connected components widget
   widgets:
     - command: napari-skimage.make_farid_widget
       autogenerate: true
@@ -23,3 +29,8 @@ contributions:
       display_name: Gaussian filter
     - command: napari-skimage.make_threshold_widget
       display_name: Threshold
+    - command: napari-skimage.make_binary_morphology_widget
+      display_name: Binary Morphology
+    - command: napari-skimage.make_connected_components_widget
+      autogenerate: true
+      display_name: Connected components
