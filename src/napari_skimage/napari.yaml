@@ -1,0 +1,30 @@
+name: napari-skimage
+display_name: scikit-image operations
+# use 'hidden' to remove plugin from napari hub search results
+visibility: public
+# see https://napari.org/stable/plugins/manifest.html for valid categories
+categories: ["Annotation", "Segmentation", "Acquisition"]
+contributions:
+  commands:
+    - id: napari-skimage.make_container_widget
+      python_name: napari_skimage:ImageThreshold
+      title: Make threshold Container widget
+    - id: napari-skimage.make_magic_widget
+      python_name: napari_skimage:threshold_magic_widget
+      title: Make threshold magic widget
+    - id: napari-skimage.make_function_widget
+      python_name: napari_skimage:threshold_autogenerate_widget
+      title: Make threshold function widget
+    - id: napari-skimage.make_qwidget
+      python_name: napari_skimage:ExampleQWidget
+      title: Make example QWidget
+  widgets:
+    - command: napari-skimage.make_container_widget
+      display_name: Container Threshold
+    - command: napari-skimage.make_magic_widget
+      display_name: Magic Threshold
+    - command: napari-skimage.make_function_widget
+      autogenerate: true
+      display_name: Autogenerate Threshold
+    - command: napari-skimage.make_qwidget
+      display_name: Example QWidget
