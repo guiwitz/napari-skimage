@@ -24,5 +24,5 @@ def threshold_widget(
     mask = img_layer.data > th
     return (
         mask,
-        {'name': f'Threshold {method}'},
+        {'name': f'{img_layer.name}_threshold_{method}'},
         'labels')

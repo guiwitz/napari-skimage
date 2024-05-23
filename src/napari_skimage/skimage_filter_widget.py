@@ -30,5 +30,5 @@ def gaussian_filter_widget(
 ) -> napari.types.LayerDataTuple:
     return (
         sf.gaussian(img_layer.data, sigma=sigma, preserve_range=preserve_range, mode=mode),
-        {'name': f'Gaussian Filter σ={sigma}'},
+        {'name': f'{img_layer.name}_gaussian_σ={sigma}'},
         'image')
