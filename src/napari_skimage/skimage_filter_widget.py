@@ -18,9 +18,10 @@ def farid_filter_widget(
     return sf.farid(img)
     
 @magic_factory(
-    mode={'choices': ['reflect', 'constant', 'nearest', 'mirror', 'wrap']},
-    call_button="Gaussian Filter"
-)
+        img_layer={'label': 'Image'},
+        mode={'choices': ['reflect', 'constant', 'nearest', 'mirror', 'wrap']},
+        call_button="Apply Gaussian Filter"
+        )
 def gaussian_filter_widget(
     img_layer: Image,
     sigma: float = 1.0,

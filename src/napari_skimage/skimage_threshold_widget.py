@@ -11,9 +11,10 @@ if TYPE_CHECKING:
 
     
 @magic_factory(
-    method={'choices': ['otsu', 'li', 'mean', 'yen', 'sauvola']},
-    call_button="Threshold"
-)
+        img_layer={'label': 'Image'},
+        method={'choices': ['otsu', 'li', 'mean', 'yen', 'sauvola']},
+        call_button="Apply Thresholding"
+        )
 def threshold_widget(
     img_layer: Image,
     method = "otsu",
