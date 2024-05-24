@@ -11,6 +11,7 @@ if TYPE_CHECKING:
 
 @magic_factory(
     label_layer={'label': 'Labels'},
+    call_button="Find connected components"
  )
 def connected_components_widget(
     label_layer: Labels) -> napari.types.LayerDataTuple:

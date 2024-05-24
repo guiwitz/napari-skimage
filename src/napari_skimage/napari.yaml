@@ -32,5 +32,4 @@ contributions:
     - command: napari-skimage.make_binary_morphology_widget
       display_name: Binary Morphology
     - command: napari-skimage.make_connected_components_widget
-      autogenerate: true
       display_name: Connected components
