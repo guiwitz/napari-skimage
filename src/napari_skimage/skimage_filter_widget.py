@@ -12,10 +12,17 @@ import napari.types
 if TYPE_CHECKING:
     import napari
 
-
+@magic_factory(
+        image_layer={'label': 'Image'},
+        mode={'choices': ['reflect', 'constant', 'nearest', 'mirror', 'wrap']},
+        call_button="Apply Farid filter"
+        )
 def farid_filter_widget(
-    img: "napari.types.ImageData") -> "napari.types.ImageData":
-    return sf.farid(img)
+    image_layer: Image, mode='reflect') -> napari.types.LayerDataTuple:
+    return (
+        sf.farid(image_layer.data),
+        {'name': f'{image_layer.name}_farid'},
+        'image')
     
 @magic_factory(
         img_layer={'label': 'Image'},

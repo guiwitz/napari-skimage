@@ -23,7 +23,6 @@ contributions:
       title: Make connected components widget
   widgets:
     - command: napari-skimage.make_farid_widget
-      autogenerate: true
       display_name: Farid filter
     - command: napari-skimage.make_gaussian_widget
       display_name: Gaussian filter
