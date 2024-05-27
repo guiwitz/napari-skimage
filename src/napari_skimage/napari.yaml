@@ -8,7 +8,10 @@ contributions:
   commands:
     - id: napari-skimage.make_farid_widget
       python_name: napari_skimage.skimage_filter_widget:farid_filter_widget
-      title: Make farid filter widget
+      title: Make Farid filter widget
+    - id: napari-skimage.make_laplace_widget
+      python_name: napari_skimage.skimage_filter_widget:laplace_filter_widget
+      title: Make Laplace filter widget
     - id: napari-skimage.make_gaussian_widget
       python_name: napari_skimage.skimage_filter_widget:gaussian_filter_widget
       title: Make gaussian filter widget
@@ -24,6 +27,8 @@ contributions:
   widgets:
     - command: napari-skimage.make_farid_widget
       display_name: Farid filter
+    - command: napari-skimage.make_laplace_widget
+      display_name: Laplace filter
     - command: napari-skimage.make_gaussian_widget
       display_name: Gaussian filter
     - command: napari-skimage.make_threshold_widget

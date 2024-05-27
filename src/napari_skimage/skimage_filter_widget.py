@@ -23,6 +23,18 @@ def farid_filter_widget(
         sf.farid(image_layer.data),
         {'name': f'{image_layer.name}_farid'},
         'image')
+
+@magic_factory(
+        image_layer={'label': 'Image'},
+        call_button="Apply Laplace filter"
+        )
+def laplace_filter_widget(
+    image_layer: Image,
+    ksize: int = 3.0) -> napari.types.LayerDataTuple:
+    return (
+        sf.laplace(image_layer.data, ksize=ksize),
+        {'name': f'{image_layer.name}_laplace'},
+        'image')
     
 @magic_factory(
         img_layer={'label': 'Image'},
