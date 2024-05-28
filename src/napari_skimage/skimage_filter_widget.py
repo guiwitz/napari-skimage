@@ -106,6 +106,27 @@ def median_filter_widget(
         {'name': f'{img_layer.name}_median'},
         'image')
 
+@magic_factory(
+    img_layer={'label': 'Image'},
+    call_button="Apply operation"
+)
+def butterworth_filter_widget(
+    img_layer: Image,
+    cuttoff_frequency_ratio: float = 0.005,
+    high_pass: bool = True,
+    order: int = 2,
+    squared_butterworth: bool = True,
+    npad: int = 0,
+) -> napari.types.LayerDataTuple:
+    img_filtered = sf.butterworth(
+        img_layer.data, cutoff_frequency_ratio=cuttoff_frequency_ratio,
+        high_pass=high_pass, order=order, squared_butterworth=squared_butterworth,
+        npad=npad)
+    return (
+        img_filtered,
+        {'name': f'{img_layer.name}_butterworth'},
+        'image')
+
 class RankFilterWidget(Container):
     def __init__(self, viewer: "napari.viewer.Viewer"):
         super().__init__()
