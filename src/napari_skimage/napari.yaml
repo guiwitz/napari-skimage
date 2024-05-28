@@ -9,12 +9,18 @@ contributions:
     - id: napari-skimage.make_farid_widget
       python_name: napari_skimage.skimage_filter_widget:farid_filter_widget
       title: Make Farid filter widget
+    - id: napari-skimage.make_prewitt_widget
+      python_name: napari_skimage.skimage_filter_widget:prewitt_filter_widget
+      title: Make Prewitt filter widget
     - id: napari-skimage.make_laplace_widget
       python_name: napari_skimage.skimage_filter_widget:laplace_filter_widget
       title: Make Laplace filter widget
     - id: napari-skimage.make_gaussian_widget
       python_name: napari_skimage.skimage_filter_widget:gaussian_filter_widget
       title: Make gaussian filter widget
+    - id: napari-skimage.make_frangi_widget
+      python_name: napari_skimage.skimage_filter_widget:frangi_filter_widget
+      title: Make Frangi filter widget
     - id: napari-skimage.make_threshold_widget
       python_name: napari_skimage.skimage_threshold_widget:threshold_widget
       title: Make threshold widget
@@ -27,10 +33,14 @@ contributions:
   widgets:
     - command: napari-skimage.make_farid_widget
       display_name: Farid filter
+    - command: napari-skimage.make_prewitt_widget
+      display_name: Prewitt filter
     - command: napari-skimage.make_laplace_widget
       display_name: Laplace filter
     - command: napari-skimage.make_gaussian_widget
       display_name: Gaussian filter
+    - command: napari-skimage.make_frangi_widget
+      display_name: Frangi filter
     - command: napari-skimage.make_threshold_widget
       display_name: Threshold
     - command: napari-skimage.make_binary_morphology_widget

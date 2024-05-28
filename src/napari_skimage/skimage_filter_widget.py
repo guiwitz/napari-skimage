@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+import numpy as np
 from magicgui import magic_factory
 from magicgui.widgets import CheckBox, Container, create_widget
 from qtpy.QtWidgets import QHBoxLayout, QPushButton, QWidget
@@ -20,8 +21,20 @@ if TYPE_CHECKING:
 def farid_filter_widget(
     image_layer: Image, mode='reflect') -> napari.types.LayerDataTuple:
     return (
-        sf.farid(image_layer.data),
+        sf.farid(image_layer.data, mode=mode),
         {'name': f'{image_layer.name}_farid'},
+        'image')
+
+@magic_factory(
+        image_layer={'label': 'Image'},
+        mode={'choices': ['reflect', 'constant', 'nearest', 'mirror', 'wrap']},
+        call_button="Apply Prewitt filter"
+        )
+def prewitt_filter_widget(
+    image_layer: Image, mode='reflect') -> napari.types.LayerDataTuple:
+    return (
+        sf.prewitt(image_layer.data, mode=mode),
+        {'name': f'{image_layer.name}_prewitt'},
         'image')
 
 @magic_factory(
@@ -50,4 +63,23 @@ def gaussian_filter_widget(
     return (
         sf.gaussian(img_layer.data, sigma=sigma, preserve_range=preserve_range, mode=mode),
         {'name': f'{img_layer.name}_gaussian_σ={sigma}'},
+        'image')
+
+@magic_factory(
+        img_layer={'label': 'Image'},
+        mode={'choices': ['reflect', 'constant', 'nearest', 'mirror', 'wrap']},
+        call_button="Apply Frangi Filter"
+        )
+def frangi_filter_widget(
+    img_layer: Image,
+    scale_start: float = 1.0,
+    scale_end: float = 10.0,
+    scale_step: float = 2.0,
+    mode = "reflect",
+    black_ridges: bool = True,
+) -> napari.types.LayerDataTuple:
+    return (
+        sf.frangi(img_layer.data, sigmas=np.arange(scale_start, scale_end, scale_step),
+                  black_ridges=black_ridges, mode=mode),
+        {'name': f'{img_layer.name}_frangi'},
         'image')
