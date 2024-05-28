@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from magicgui import magic_factory
-from magicgui.widgets import CheckBox, Container, create_widget
+from magicgui.widgets import Button, Container, create_widget, RangeSlider
 from qtpy.QtWidgets import QHBoxLayout, QPushButton, QWidget
 from skimage.util import img_as_float
 import skimage.filters as sf
@@ -105,3 +105,77 @@ def median_filter_widget(
         img_filtered,
         {'name': f'{img_layer.name}_median'},
         'image')
+
+class RankFilterWidget(Container):
+    def __init__(self, viewer: "napari.viewer.Viewer"):
+        super().__init__()
+        self._viewer = viewer
+        # use create_widget to generate widgets from type annotations
+        self._image_layer_combo = create_widget(
+            label="Image", annotation="napari.layers.Image"
+        )
+        self.stat = create_widget(
+            label="Filter type", annotation=str, widget_type="ComboBox",
+            options={'choices':['mean', 'median', 'minimum', 'maximum', 'sum',
+                                'entropy', 'otsu', 'subtract_mean', 'windowed_histogram',
+                                'gradient', 'geometric_mean','equalize', 'entropy',
+                                'enhance_contrast', 'autolevel',
+                                'mean_percentile', 'subtract_mean_percentile', 'sum_percentile',
+                                'gradient_percentile', 'enhance_contrast_percentile', 'autolevel_percentile']}
+        )
+
+        self.footprint = create_widget(
+            label="Footprint", annotation=str, widget_type="ComboBox",
+            options={'choices':['disk', 'square', 'diamond', 'star', 'octagon']}
+        )
+
+        self.footprint_size = create_widget(
+            label="Footprint size", annotation=int)
+
+        self.percentile =create_widget(
+            label="Percentile", widget_type='FloatRangeSlider', options={'value':[0.1, 0.99], 'min': 0, 'max': 1, 'step': 0.01})
+
+        self.btn_apply = Button(text="Apply operation")
+        self.btn_apply.clicked.connect(self._rank_filter_im)
+
+        # append into/extend the container with your widgets
+        self.extend(
+            [
+                self._image_layer_combo,
+                self.stat,
+                self.footprint,
+                self.footprint_size,
+                self.btn_apply
+            ]
+        )
+
+        self.stat.changed.connect(self._on_choose_stat)
+
+    def _on_choose_stat(self):
+        if self.stat.value in ['mean_percentile', 'subtract_mean_percentile', 'sum_percentile',
+                                'gradient_percentile', 'enhance_contrast_percentile', 'autolevel_percentile']:
+            if self.percentile not in self:
+                self.extend([self.percentile])
+        else:
+            if self.percentile in self:
+                self.remove(self.percentile)
+
+    def _rank_filter_im(self):
+        image_layer = self._image_layer_combo.value
+        if image_layer is None:
+            return
+
+        kwargs = {}
+        if self.stat.value in ['mean_percentile', 'subtract_mean_percentile', 'sum_percentile',
+                                'gradient_percentile', 'enhance_contrast_percentile', 'autolevel_percentile']:
+            kwargs = {'p0': self.percentile.value[0], 'p1': self.percentile.value[1]}          
+
+        fun = getattr(sf.rank, self.stat.value)
+        fun_footprint = getattr(sm, self.footprint.value)
+        selem = fun_footprint(self.footprint_size.value)
+        img_filtered = fun(image_layer.data, footprint=selem, **kwargs)
+        self._viewer.add_image(
+            img_filtered,
+            name=f"{image_layer.name}_{self.stat.value}",
+            colormap="gray",
+        )

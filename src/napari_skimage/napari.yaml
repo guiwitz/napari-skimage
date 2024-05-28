@@ -39,6 +39,9 @@ contributions:
     - id: napari-skimage.make_conversion_widget
       python_name: napari_skimage.mathsops:conversion_widget
       title: Make conversion widget
+    - id: napari-skimage.make_rank_widget
+      python_name: napari_skimage.skimage_filter_widget:RankFilterWidget
+      title: Make Rank filter widget
   widgets:
     - command: napari-skimage.make_farid_widget
       display_name: Farid filter
@@ -62,3 +65,5 @@ contributions:
       display_name: Simple maths
     - command: napari-skimage.make_conversion_widget
       display_name: Conversion
+    - command: napari-skimage.make_rank_widget
+      display_name: Rank filters
