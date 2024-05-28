@@ -21,6 +21,9 @@ contributions:
     - id: napari-skimage.make_frangi_widget
       python_name: napari_skimage.skimage_filter_widget:frangi_filter_widget
       title: Make Frangi filter widget
+    - id: napari-skimage.make_median_widget
+      python_name: napari_skimage.skimage_filter_widget:median_filter_widget
+      title: Make Median filter widget
     - id: napari-skimage.make_threshold_widget
       python_name: napari_skimage.skimage_threshold_widget:threshold_widget
       title: Make threshold widget
@@ -47,6 +50,8 @@ contributions:
       display_name: Gaussian filter
     - command: napari-skimage.make_frangi_widget
       display_name: Frangi filter
+    - command: napari-skimage.make_median_widget
+      display_name: Median filter
     - command: napari-skimage.make_threshold_widget
       display_name: Threshold
     - command: napari-skimage.make_binary_morphology_widget

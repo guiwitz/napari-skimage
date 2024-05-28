@@ -6,6 +6,7 @@ from magicgui.widgets import CheckBox, Container, create_widget
 from qtpy.QtWidgets import QHBoxLayout, QPushButton, QWidget
 from skimage.util import img_as_float
 import skimage.filters as sf
+import skimage.morphology as sm
 from napari.layers import Image
 import napari.types
 
@@ -82,4 +83,25 @@ def frangi_filter_widget(
         sf.frangi(img_layer.data, sigmas=np.arange(scale_start, scale_end, scale_step),
                   black_ridges=black_ridges, mode=mode),
         {'name': f'{img_layer.name}_frangi'},
+        'image')
+
+@magic_factory(
+    img_layer={'label': 'Image'},
+    mode={'choices': {'reflect', 'constant', 'nearest', 'mirror', 'wrap'}},
+    footprint={'label': 'Footprint', 'choices': ['disk', 'square', 'diamond', 'star', 'octagon']},
+    footprint_size={'label': 'Footprint size', 'max': 100, 'min': 1, 'step': 1},
+    call_button="Apply operation"
+)
+def median_filter_widget(
+    img_layer: Image,
+    footprint = "disk",
+    footprint_size = 3,
+    mode = "nearest"
+) -> napari.types.LayerDataTuple:
+    fun_footprint = getattr(sm, footprint)
+    selem = fun_footprint(footprint_size)
+    img_filtered = sf.median(img_layer.data, footprint=selem, mode=mode)
+    return (
+        img_filtered,
+        {'name': f'{img_layer.name}_median'},
         'image')
