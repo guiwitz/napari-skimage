@@ -2,9 +2,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from magicgui import magic_factory
-from magicgui.widgets import Button, Container, create_widget, RangeSlider
-from qtpy.QtWidgets import QHBoxLayout, QPushButton, QWidget
-from skimage.util import img_as_float
+from magicgui.widgets import Button, Container, create_widget
 import skimage.filters as sf
 import skimage.morphology as sm
 from napari.layers import Image
