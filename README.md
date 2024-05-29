@@ -29,16 +29,35 @@ To install latest development version :
 
 ## Usage
 
-The plugin function can be accessed under ```Plugins -> napari-skimage```. Each function will appear as a widget on the right of the napari window. Some functions such as ```Gaussian Filter``` give access to a single operation and its options. Some functions such as ```Thresholding``` give access to variants of the same operation via a dropdown menu. Currently the plugin does not support multi-channel processing and will consider those as stacks. At the moment, the plugin offers access to:
-- A set of classical filters: Gaussian, Prewitt, Laplace etc.
-- A set of rank filters: median, minimum, maximum etc.
-- A set of thresholding methods: Otsu, Li, Yen etc.
-- A set of morphological operations: erosion, dilation, opening, closing etc.
-- A set of binary morphology operations: binary erosion, binary dilation etc.
+The plugin function can be accessed under ```Plugins -> napari-skimage```. Each function will appear as a widget on the right of the napari window. Some functions such as ```Gaussian Filter``` give access to a single operation and its options. Some functions such as ```Thresholding``` give access to variants of the same operation via a dropdown menu. Currently the plugin does not support multi-channel processing and will consider those as stacks. At the moment, the plugin offers access to the following operation types.
 
+### Filtering
+
+A set of classical filters: Gaussian, Prewitt, Laplace etc. as well as rank filters such as median, minimum, maximum etc.
+
+![Gaussian filter](docs/gaussian.png)
+
+### Thresholdig
+A set of thresholding methods: Otsu, Li, Yen etc.
+![Thresholding](docs/thresholding.png)
+
+### Binary morphological operations
+A set of binary morphology operations: binary erosion, binary dilation etc.
+![Binary morphological operations](docs/binary_morphology.png)
+
+### Morphological operations
+A set of morphological operations: erosion, dilation, opening, closing etc.
+![Morphological operations](docs/morphology.png)
+
+### Restoration
+A set of restoration operations such as rolling ball, or non-local means denoising.
+![Restoration](docs/denoise_nl.png)
+
+### Mathematics 
 In addition the plugin provides a set of simple mathematical operators to:
 - operate on single images e.g. square, square root, log etc.
 - operate on two images e.g. add, subtract, multiply etc.
+![Mathematics](docs/simple_maths.png)
 
 ## Code structure
 
