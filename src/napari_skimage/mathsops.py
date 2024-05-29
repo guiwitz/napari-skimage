@@ -31,23 +31,23 @@ def simple_maths_widget(
 @magic_factory(
         image_layer={'label': 'Image'},
         image_layer2={'label': 'Image 2'},
-        mode={'choices': ['add', 'subtract', 'multiply', 'divide']},
+        operation={'choices': ['add', 'subtract', 'multiply', 'divide']},
         call_button="Apply operation"
         )
 def maths_image_pairs_widget(
-    image_layer: Image, image_layer2: Image, mode='add'
+    image_layer: Image, image_layer2: Image, operation='add'
 ) -> napari.types.LayerDataTuple:
-    if mode == 'add':
+    if operation == 'add':
         out = image_layer.data + image_layer2.data
-    elif mode == 'subtract':
+    elif operation == 'subtract':
         out = image_layer.data - image_layer2.data
-    elif mode == 'multiply':
+    elif operation == 'multiply':
         out = image_layer.data * image_layer2.data
-    elif mode == 'divide':
+    elif operation == 'divide':
         out = image_layer.data / image_layer2.data
     return (
         out,
-        {'name': f'Result_{mode}'},
+        {'name': f'Result_{operation}'},
         'image')
 
 @magic_factory(
