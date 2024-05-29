@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 from magicgui import magic_factory
 import skimage.util
-from napari.layers import Image
+from napari.layers import Image, Labels, Layer
 import napari.types
 
 
@@ -29,22 +29,26 @@ def simple_maths_widget(
         'image')
 
 @magic_factory(
-        image_layer={'label': 'Image'},
-        image_layer2={'label': 'Image 2'},
+        data_layer={'label': 'Image'},
+        data_layer2={'label': 'Image 2'},
         operation={'choices': ['add', 'subtract', 'multiply', 'divide']},
         call_button="Apply operation"
         )
 def maths_image_pairs_widget(
-    image_layer: Image, image_layer2: Image, operation='add'
+    data_layer: Layer,
+    data_layer2: Layer,
+    operation='add'
 ) -> napari.types.LayerDataTuple:
+    if not isinstance(data_layer, (Labels, Image)) or not isinstance(data_layer2, (Labels, Image)):
+        raise ValueError("Both layers must be Image or Labels layers")
     if operation == 'add':
-        out = image_layer.data + image_layer2.data
+        out = data_layer.data + data_layer2.data
     elif operation == 'subtract':
-        out = image_layer.data - image_layer2.data
+        out = data_layer.data - data_layer2.data
     elif operation == 'multiply':
-        out = image_layer.data * image_layer2.data
+        out = data_layer.data * data_layer2.data
     elif operation == 'divide':
-        out = image_layer.data / image_layer2.data
+        out = data_layer.data / data_layer2.data
     return (
         out,
         {'name': f'Result_{operation}'},
