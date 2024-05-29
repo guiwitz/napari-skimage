@@ -7,7 +7,7 @@ except ImportError:
 from .skimage_filter_widget import (farid_filter_widget, prewitt_filter_widget,
                                     laplace_filter_widget, gaussian_filter_widget,
                                     frangi_filter_widget, median_filter_widget,
-                                    butterworth_filter_widget)
+                                    butterworth_filter_widget, RankFilterWidget)
 from .skimage_threshold_widget import threshold_widget
 from .skimage_morphology_widget import (connected_components_widget,
                                         binary_morphology_widget, morphology_widget)
@@ -23,6 +23,7 @@ __all__ = (
     "frangi_filter_widget",
     "median_filter_widget",
     "butterworth_filter_widget",
+    "RankFilterWidget",
     "threshold_widget",
     "connected_components_widget",
     "binary_morphology_widget",
