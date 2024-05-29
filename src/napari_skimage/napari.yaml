@@ -33,6 +33,9 @@ contributions:
     - id: napari-skimage.make_binary_morphology_widget
       python_name: napari_skimage.skimage_morphology_widget:binary_morphology_widget
       title: Make binary morphology widget
+    - id: napari-skimage.make__morphology_widget
+      python_name: napari_skimage.skimage_morphology_widget:morphology_widget
+      title: Make morphology widget
     - id: napari-skimage.make_connected_components_widget
       python_name: napari_skimage.skimage_morphology_widget:connected_components_widget
       title: Make connected components widget
@@ -73,6 +76,8 @@ contributions:
       display_name: Threshold
     - command: napari-skimage.make_binary_morphology_widget
       display_name: Binary Morphology
+    - command: napari-skimage.make_morphology_widget
+      display_name: Morphology
     - command: napari-skimage.make_connected_components_widget
       display_name: Connected components
     - command: napari-skimage.make_simple_maths_widget

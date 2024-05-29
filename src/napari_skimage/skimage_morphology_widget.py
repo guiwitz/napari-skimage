@@ -25,6 +25,8 @@ def connected_components_widget(
     method={'choices': ['erosion', 'dilation', 'opening', 'closing']},
     footprint={'label': 'Footprint', 'choices': ['disk', 'square', 'diamond', 'star', 'octagon']},
     footprint_size={'label': 'Footprint size', 'max': 100, 'min': 1, 'step': 1},
+    # to add for skimage 0.23
+    #mode = {'choices': ['min', 'max', 'ignore']},
     call_button="Apply operation"
 )
 def binary_morphology_widget(
@@ -32,12 +34,39 @@ def binary_morphology_widget(
     method = "erosion",
     footprint = "disk",
     footprint_size = 3,
+    #mode = "ignore"
 ) -> napari.types.LayerDataTuple:
     fun = getattr(sm, f'binary_{method}')
     fun_footprint = getattr(sm, footprint)
     selem = fun_footprint(footprint_size)
-    mask = fun(label_layer.data, selem)
+    mask = fun(label_layer.data, selem)#, mode=mode)
     return (
         mask,
         {'name': f'{label_layer.name}_{method}'},
         'labels')
+
+@magic_factory(
+    label_layer={'label': 'Image'},
+    method={'choices': ['erosion', 'dilation', 'opening', 'closing',
+                        'white_tophat', 'black_tophat']},
+    footprint={'label': 'Footprint', 'choices': ['disk', 'square', 'diamond', 'star', 'octagon']},
+    footprint_size={'label': 'Footprint size', 'max': 100, 'min': 1, 'step': 1},
+    # to add for skimage 0.23
+    # mode = {'choices': ['reflect', 'constant', 'nearest0', 'mirror', 'wrap', 'max', 'min', 'ignore']},
+    call_button="Apply operation"
+)
+def morphology_widget(
+    label_layer: Image,
+    method = "erosion",
+    footprint = "disk",
+    footprint_size = 3,
+    #mode = "ignore"
+) -> napari.types.LayerDataTuple:
+    fun = getattr(sm, f'{method}')
+    fun_footprint = getattr(sm, footprint)
+    selem = fun_footprint(footprint_size)
+    mask = fun(label_layer.data, selem)#, mode=mode)
+    return (
+        mask,
+        {'name': f'{label_layer.name}_{method}'},
+        'image')
