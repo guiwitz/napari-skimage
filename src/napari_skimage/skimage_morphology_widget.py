@@ -19,7 +19,7 @@ def connected_components_widget(
         sm.label(label_layer.data),
         {'name': f'{label_layer.name}_labels'},
         'labels')
-    return 
+ 
 @magic_factory(
     label_layer={'label': 'Labels'},
     method={'choices': ['erosion', 'dilation', 'opening', 'closing']},
