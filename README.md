@@ -7,19 +7,13 @@
 [![codecov](https://codecov.io/gh/guiwitz/napari-skimage/branch/main/graph/badge.svg)](https://codecov.io/gh/guiwitz/napari-skimage)
 [![napari hub](https://img.shields.io/endpoint?url=https://api.napari-hub.org/shields/napari-skimage)](https://napari-hub.org/plugins/napari-skimage)
 
-A plugin to apply scikit-image operations
-
-----------------------------------
+napari-skimage gives easy access to scikit-image functions in napari. The main goal of the plugin is to allow new users of napari, especially without coding experience, to easily explore basic image processing, in a similar way to what is possible in Fiji.
 
 This [napari] plugin was generated with [Cookiecutter] using [@napari]'s [cookiecutter-napari-plugin] template.
 
-<!--
-Don't miss the full getting started guide to set up your new package:
-https://github.com/napari/cookiecutter-napari-plugin#getting-started
+## Philosophy
 
-and review the napari docs for plugin developers:
-https://napari.org/stable/plugins/index.html
--->
+The plugin is still in early development and does not cover all functions of scikit-image. If you are interested in a specific function, please open an issue or a pull request. scikit-image functions are turned into interactive widgets mostly via magicgui, a tool that allows to create GUIs from functions in a simple way (in particular not requiring Qt knowledge). The code avoids on purpose complex approaches, e.g. to automate the creation of widgets, in order to keep the code simple and easy to understand for beginners.
 
 ## Installation
 
@@ -33,6 +27,22 @@ To install latest development version :
 
     pip install git+https://github.com/guiwitz/napari-skimage.git
 
+## Usage
+
+The plugin function can be accessed under ```Plugins -> napari-skimage```. Each function will appear as a widget on the right of the napari window. Some functions such as ```Gaussian Filter``` give access to a single operation and its options. Some functions such as ```Thresholding``` give access to variants of the same operation via a dropdown menu. Currently the plugin does not support multi-channel processing and will consider those as stacks. At the moment, the plugin offers access to:
+- A set of classical filters: Gaussian, Prewitt, Laplace etc.
+- A set of rank filters: median, minimum, maximum etc.
+- A set of thresholding methods: Otsu, Li, Yen etc.
+- A set of morphological operations: erosion, dilation, opening, closing etc.
+- A set of binary morphology operations: binary erosion, binary dilation etc.
+
+In addition the plugin provides a set of simple mathematical operators to:
+- operate on single images e.g. square, square root, log etc.
+- operate on two images e.g. add, subtract, multiply etc.
+
+## Code structure
+
+Each set of functions is grouped in a separate module. For example all filtering operations are grouped in ```src/napari_skimge/skimage_filter_widget.py```. A set of test in ```src/_tests/test_basic_widgets.py``` simply check that each widget can be created and generated an output of the correct size using the default settings.
 
 ## Contributing
 
