@@ -149,7 +149,7 @@ class RankFilterWidget(Container):
         )
 
         self.footprint_size = create_widget(
-            label="Footprint size", annotation=int)
+            label="Footprint size", annotation=int, options={'value': 3})
 
         self.percentile =create_widget(
             label="Percentile", widget_type='FloatRangeSlider', options={'value':[0.1, 0.99], 'min': 0, 'max': 1, 'step': 0.01})
