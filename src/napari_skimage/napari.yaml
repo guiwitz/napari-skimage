@@ -33,14 +33,14 @@ contributions:
     - id: napari-skimage.make_binary_morphology_widget
       python_name: napari_skimage.skimage_morphology_widget:binary_morphology_widget
       title: Make binary morphology widget
-    - id: napari-skimage.make__morphology_widget
+    - id: napari-skimage.make_morphology_widget
       python_name: napari_skimage.skimage_morphology_widget:morphology_widget
       title: Make morphology widget
     - id: napari-skimage.make_connected_components_widget
       python_name: napari_skimage.skimage_morphology_widget:connected_components_widget
       title: Make connected components widget
     - id: napari-skimage.make_maths_image_pairs_widget
-      python_name: napari_skimage.mathsops:maths_image_pairs
+      python_name: napari_skimage.mathsops:maths_image_pairs_widget
       title: Make image pairs maths widget
     - id: napari-skimage.make_simple_maths_widget
       python_name: napari_skimage.mathsops:simple_maths_widget
