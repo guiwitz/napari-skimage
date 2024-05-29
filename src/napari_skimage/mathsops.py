@@ -2,10 +2,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from magicgui import magic_factory
-from magicgui.widgets import CheckBox, Container, create_widget
-from qtpy.QtWidgets import QHBoxLayout, QPushButton, QWidget
 import skimage.util
-import skimage.filters as sf
 from napari.layers import Image
 import napari.types
 
@@ -15,11 +12,29 @@ if TYPE_CHECKING:
 
 @magic_factory(
         image_layer={'label': 'Image'},
+        operation={'choices': ['square', 'sqrt', 'log', 'log10', 'exp']},
+        call_button="Apply operation"
+        )
+def simple_maths_widget(
+    image_layer: Image, operation='sqrt'
+) -> napari.types.LayerDataTuple:
+    if operation == 'square':
+        fun = lambda x: x.astype(np.float32)**2
+    else:
+        fun = getattr(np, f'{operation}')
+    out = fun(image_layer.data)
+    return (
+        out,
+        {'name': f'{image_layer.name}_{operation}'},
+        'image')
+
+@magic_factory(
+        image_layer={'label': 'Image'},
         image_layer2={'label': 'Image 2'},
         mode={'choices': ['add', 'subtract', 'multiply', 'divide']},
         call_button="Apply operation"
         )
-def simple_maths_widget(
+def maths_image_pairs_widget(
     image_layer: Image, image_layer2: Image, mode='add'
 ) -> napari.types.LayerDataTuple:
     if mode == 'add':

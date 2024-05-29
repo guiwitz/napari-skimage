@@ -36,6 +36,9 @@ contributions:
     - id: napari-skimage.make_connected_components_widget
       python_name: napari_skimage.skimage_morphology_widget:connected_components_widget
       title: Make connected components widget
+    - id: napari-skimage.make_maths_image_pairs_widget
+      python_name: napari_skimage.mathsops:maths_image_pairs
+      title: Make image pairs maths widget
     - id: napari-skimage.make_simple_maths_widget
       python_name: napari_skimage.mathsops:simple_maths_widget
       title: Make simple maths widget
@@ -68,6 +71,8 @@ contributions:
       display_name: Connected components
     - command: napari-skimage.make_simple_maths_widget
       display_name: Simple maths
+    - command: napari-skimage.make_maths_image_pairs_widget
+      display_name: Image pairs maths
     - command: napari-skimage.make_conversion_widget
       display_name: Conversion
     - command: napari-skimage.make_rank_widget
