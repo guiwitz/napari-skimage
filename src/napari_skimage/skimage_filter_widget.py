@@ -2,7 +2,8 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from magicgui import magic_factory
-from magicgui.widgets import Button, Container, create_widget
+from magicgui.widgets import Button, Container, create_widget, Label
+from qtpy.QtCore import Qt
 import skimage.filters as sf
 import skimage.morphology as sm
 from napari.layers import Image
@@ -12,10 +13,27 @@ import napari.types
 if TYPE_CHECKING:
     import napari
 
+"""For filters a widget is defined for each filter. The _on_init function is used to add a hyperlink to the
+documentation of the function that the widget is calling. For this to work properly, the widget function needs
+to be named "<skimage function name>_filter_widget".
+
+RankFilterWidget is a class that defines a widget for rank filters. The widget can be used for all rank filters.
+"""
+
+def _on_init(widget):
+    label_widget = Label(value='')
+    func_name = widget.label.split(' ')[0]
+    label_widget.value = f'<a href=\"https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.{func_name}\">skimage.filters.{func_name}</a>'
+    label_widget.native.setTextFormat(Qt.RichText)
+    label_widget.native.setTextInteractionFlags(Qt.TextBrowserInteraction)
+    label_widget.native.setOpenExternalLinks(True)
+    widget.extend([label_widget])
+
 @magic_factory(
         image_layer={'label': 'Image'},
         mode={'choices': ['reflect', 'constant', 'nearest', 'mirror', 'wrap']},
-        call_button="Apply Farid filter"
+        call_button="Apply Farid filter",
+        widget_init=_on_init
         )
 def farid_filter_widget(
     image_layer: Image, mode='reflect') -> napari.types.LayerDataTuple:
@@ -27,7 +45,8 @@ def farid_filter_widget(
 @magic_factory(
         image_layer={'label': 'Image'},
         mode={'choices': ['reflect', 'constant', 'nearest', 'mirror', 'wrap']},
-        call_button="Apply Prewitt filter"
+        call_button="Apply Prewitt filter",
+        widget_init=_on_init
         )
 def prewitt_filter_widget(
     image_layer: Image, mode='reflect') -> napari.types.LayerDataTuple:
@@ -38,7 +57,8 @@ def prewitt_filter_widget(
 
 @magic_factory(
         image_layer={'label': 'Image'},
-        call_button="Apply Laplace filter"
+        call_button="Apply Laplace filter",
+        widget_init=_on_init
         )
 def laplace_filter_widget(
     image_layer: Image,
@@ -47,11 +67,12 @@ def laplace_filter_widget(
         sf.laplace(image_layer.data, ksize=ksize),
         {'name': f'{image_layer.name}_laplace'},
         'image')
-    
+
 @magic_factory(
         img_layer={'label': 'Image'},
         mode={'choices': ['reflect', 'constant', 'nearest', 'mirror', 'wrap']},
-        call_button="Apply Gaussian Filter"
+        call_button="Apply Gaussian Filter",
+        widget_init=_on_init
         )
 def gaussian_filter_widget(
     img_layer: Image,
@@ -67,7 +88,8 @@ def gaussian_filter_widget(
 @magic_factory(
         img_layer={'label': 'Image'},
         mode={'choices': ['reflect', 'constant', 'nearest', 'mirror', 'wrap']},
-        call_button="Apply Frangi Filter"
+        call_button="Apply Frangi Filter",
+        widget_init=_on_init
         )
 def frangi_filter_widget(
     img_layer: Image,
@@ -88,7 +110,8 @@ def frangi_filter_widget(
     mode={'choices': {'reflect', 'constant', 'nearest', 'mirror', 'wrap'}},
     footprint={'label': 'Footprint', 'choices': ['disk', 'square', 'diamond', 'star', 'octagon']},
     footprint_size={'label': 'Footprint size', 'max': 100, 'min': 1, 'step': 1},
-    call_button="Apply operation"
+    call_button="Apply operation",
+    widget_init=_on_init
 )
 def median_filter_widget(
     img_layer: Image,
@@ -106,7 +129,8 @@ def median_filter_widget(
 
 @magic_factory(
     img_layer={'label': 'Image'},
-    call_button="Apply operation"
+    call_button="Apply operation",
+    widget_init=_on_init
 )
 def butterworth_filter_widget(
     img_layer: Image,
@@ -157,6 +181,11 @@ class RankFilterWidget(Container):
         self.btn_apply = Button(text="Apply operation")
         self.btn_apply.clicked.connect(self._rank_filter_im)
 
+        self.link_label = Label(value='')
+        self.link_label.native.setTextFormat(Qt.RichText)
+        self.link_label.native.setTextInteractionFlags(Qt.TextBrowserInteraction)
+        self.link_label.native.setOpenExternalLinks(True)
+
         # append into/extend the container with your widgets
         self.extend(
             [
@@ -164,13 +193,15 @@ class RankFilterWidget(Container):
                 self.stat,
                 self.footprint,
                 self.footprint_size,
-                self.btn_apply
+                self.btn_apply,
+                self.link_label
             ]
         )
 
         self.stat.changed.connect(self._on_choose_stat)
+        self._on_choose_stat()
 
-    def _on_choose_stat(self):
+    def _on_choose_stat(self, event=None):
         if self.stat.value in ['mean_percentile', 'subtract_mean_percentile', 'sum_percentile',
                                 'gradient_percentile', 'enhance_contrast_percentile', 'autolevel_percentile']:
             if self.percentile not in self:
@@ -178,6 +209,9 @@ class RankFilterWidget(Container):
         else:
             if self.percentile in self:
                 self.remove(self.percentile)
+
+        self.link_label.value = f'<a href=\"https://scikit-image.org/docs/stable/api/skimage.filters.rank.html#skimage.filters.rank.{self.stat.value}\">skimage.filters.rank.{self.stat.value}</a>'
+        
 
     def _rank_filter_im(self):
         image_layer = self._image_layer_combo.value

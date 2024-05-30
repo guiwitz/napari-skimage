@@ -37,7 +37,7 @@ A set of classical filters: Gaussian, Prewitt, Laplace etc. as well as rank filt
 
 ![Gaussian filter](docs/gaussian.png)
 
-### Thresholdig
+### Thresholding
 A set of thresholding methods: Otsu, Li, Yen etc.
 ![Thresholding](docs/thresholding.png)
 
