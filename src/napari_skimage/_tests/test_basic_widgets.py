@@ -5,7 +5,7 @@ from napari_skimage.skimage_morphology_widget import (
     connected_components_widget,
     morphology_widget
 )
-from napari_skimage.skimage_threshold_widget import threshold_widget
+from napari_skimage.skimage_threshold_widget import threshold_widget, ManualThresholdWidget
 import napari_skimage.skimage_filter_widget as sfw
 import napari_skimage.mathsops as nsm
 
@@ -100,13 +100,27 @@ def test_connected_components_widget(make_napari_viewer):
 def test_thresholding_widget(make_napari_viewer):
     viewer = make_napari_viewer()
     random_image = np.random.random((100, 100))
-    layer = viewer.add_image(random_image)
+    layer = viewer.add_image(random_image, name='random_image')
 
     # our widget will be a MagicFactory or FunctionGui instance
     my_widget = threshold_widget()
     
     for choice in my_widget.method.choices:
         my_widget.method.native.setCurrentText(choice)
+        my_widget()
+        assert viewer.layers[f'random_image_threshold_{choice}'].data.shape == random_image.shape
+
+def test_manual_thresholding_widget(make_napari_viewer):
+    viewer = make_napari_viewer()
+    random_image = np.random.random((100, 100))
+    layer = viewer.add_image(random_image)
+
+    # our widget will be a MagicFactory or FunctionGui instance
+    my_widget = ManualThresholdWidget(viewer=viewer)
+    
+    my_widget.threshold.native.setValue(50)
+    my_widget.apply_threshold()
+    assert viewer.layers[1].data.shape == random_image.shape
 
 def test_simple_maths_widget(make_napari_viewer):
     viewer = make_napari_viewer()
