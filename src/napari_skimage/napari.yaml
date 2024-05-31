@@ -30,6 +30,9 @@ contributions:
     - id: napari-skimage.make_threshold_widget
       python_name: napari_skimage.skimage_threshold_widget:threshold_widget
       title: Make threshold widget
+    - id: napari-skimage.make_manual_threshold_widget
+      python_name: napari_skimage.skimage_threshold_widget:ManualThresholdWidget
+      title: Make manual threshold widget
     - id: napari-skimage.make_binary_morphology_widget
       python_name: napari_skimage.skimage_morphology_widget:binary_morphology_widget
       title: Make binary morphology widget
@@ -73,7 +76,9 @@ contributions:
     - command: napari-skimage.make_butterworth_widget
       display_name: Butterworth filter
     - command: napari-skimage.make_threshold_widget
-      display_name: Threshold
+      display_name: Automated Threshold
+    - command: napari-skimage.make_manual_threshold_widget
+      display_name: Manual Threshold
     - command: napari-skimage.make_binary_morphology_widget
       display_name: Binary Morphology
     - command: napari-skimage.make_morphology_widget
