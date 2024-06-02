@@ -58,7 +58,7 @@ class ManualThresholdWidget(Container):
         )
 
         self.threshold = create_widget(
-            label="Threshold value", annotation=float, widget_type="SpinBox", 
+            label="Threshold value", annotation=float,
             options={'value': 0, 'min': 0, 'max': 255, 'step': 1}
         )
 
@@ -88,6 +88,7 @@ class ManualThresholdWidget(Container):
         # automatically to 7. Leaving at 0 for the moment
         # self.threshold.min = image_layer.data.min()
         self.threshold.max = image_layer.data.max()
+        self.threshold.step = (self.threshold.max - self.threshold.min) / 100
 
     def apply_threshold(self, event=None):
         image_layer = self._image_layer_combo.value
