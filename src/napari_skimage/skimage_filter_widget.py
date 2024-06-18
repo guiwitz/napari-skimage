@@ -152,8 +152,9 @@ def butterworth_filter_widget(
 class RankFilterWidget(Container):
     def __init__(self, viewer: "napari.viewer.Viewer"):
         super().__init__()
+        
         self._viewer = viewer
-        # use create_widget to generate widgets from type annotations
+
         self._image_layer_combo = create_widget(
             label="Image", annotation="napari.layers.Image"
         )
@@ -164,7 +165,8 @@ class RankFilterWidget(Container):
                                 'gradient', 'geometric_mean','equalize', 'entropy',
                                 'enhance_contrast', 'autolevel',
                                 'mean_percentile', 'subtract_mean_percentile', 'sum_percentile',
-                                'gradient_percentile', 'enhance_contrast_percentile', 'autolevel_percentile']}
+                                'gradient_percentile', 'enhance_contrast_percentile', 
+                                'autolevel_percentile']}
         )
 
         self.footprint = create_widget(
@@ -176,7 +178,8 @@ class RankFilterWidget(Container):
             label="Footprint size", annotation=int, options={'value': 3})
 
         self.percentile =create_widget(
-            label="Percentile", widget_type='FloatRangeSlider', options={'value':[0.1, 0.99], 'min': 0, 'max': 1, 'step': 0.01})
+            label="Percentile", widget_type='FloatRangeSlider',
+            options={'value':[0.1, 0.99], 'min': 0, 'max': 1, 'step': 0.01})
 
         self.btn_apply = Button(text="Apply operation")
         self.btn_apply.clicked.connect(self._rank_filter_im)
