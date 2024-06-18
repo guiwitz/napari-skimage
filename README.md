@@ -6,7 +6,7 @@
 [![tests](https://github.com/guiwitz/napari-skimage/workflows/tests/badge.svg)](https://github.com/guiwitz/napari-skimage/actions)
 [![codecov](https://codecov.io/gh/guiwitz/napari-skimage/branch/main/graph/badge.svg)](https://codecov.io/gh/guiwitz/napari-skimage)
 [![napari hub](https://img.shields.io/endpoint?url=https://api.napari-hub.org/shields/napari-skimage)](https://napari-hub.org/plugins/napari-skimage)
-[![launch - renku](https://renkulab.io/renku-badge.svg)](https://renkulab.io/projects/guillaume.witz1/sediment/sessions/new?autostart=1)
+[![launch - renku](https://renkulab.io/renku-badge.svg)](https://renkulab.io/projects/guillaume.witz1/napari-skimage/sessions/new?autostart=1)
 
 napari-skimage gives easy access to scikit-image functions in napari. The main goal of the plugin is to allow new users of napari, especially without coding experience, to easily explore basic image processing, in a similar way to what is possible in Fiji.
 
