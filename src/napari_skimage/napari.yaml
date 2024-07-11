@@ -97,3 +97,42 @@ contributions:
       display_name: Rolling ball restoration
     - command: napari-skimage.make_denoise_nl_means_restoration_widget
       display_name: Denoise nl means restoration
+
+  menus:
+    napari/layers/filter:
+      - command: napari-skimage.make_gaussian_widget
+      - command: napari-skimage.make_farid_widget
+      - command: napari-skimage.make_prewitt_widget
+      - command: napari-skimage.make_laplace_widget
+      - command: napari-skimage.make_frangi_widget
+      - command: napari-skimage.make_median_widget
+      - command: napari-skimage.make_butterworth_widget
+      - command: napari-skimage.make_rank_widget
+      - submenu: denoising_submenu
+      - submenu: thresholding_submenu
+      - submenu: morphology_submenu
+      - submenu: maths_submenu
+    napari/layers/segment:
+      - command: napari-skimage.make_connected_components_widget
+    denoising_submenu:
+      - command: napari-skimage.make_rolling_ball_restoration_widget
+      - command: napari-skimage.make_denoise_nl_means_restoration_widget
+    thresholding_submenu:
+      - command: napari-skimage.make_threshold_widget
+      - command: napari-skimage.make_manual_threshold_widget
+    morphology_submenu:
+      - command: napari-skimage.make_binary_morphology_widget
+      - command: napari-skimage.make_morphology_widget
+    maths_submenu:
+      - command: napari-skimage.make_simple_maths_widget
+      - command: napari-skimage.make_maths_image_pairs_widget
+
+  submenus:
+    - id: denoising_submenu
+      label: Denoising
+    - id: thresholding_submenu
+      label: Thresholding
+    - id: morphology_submenu
+      label: Morphology
+    - id: maths_submenu
+      label: Maths
