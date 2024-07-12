@@ -3,7 +3,7 @@ display_name: napari skimage
 # use 'hidden' to remove plugin from napari hub search results
 visibility: public
 # see https://napari.org/stable/plugins/manifest.html for valid categories
-categories: ["Annotation", "Segmentation", "Acquisition"]
+categories: ["Image Processing", "Segmentation"]
 contributions:
   commands:
     - id: napari-skimage.make_farid_widget
