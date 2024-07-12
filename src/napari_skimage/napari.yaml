@@ -100,20 +100,26 @@ contributions:
 
   menus:
     napari/layers/filter:
-      - command: napari-skimage.make_gaussian_widget
-      - command: napari-skimage.make_farid_widget
-      - command: napari-skimage.make_prewitt_widget
-      - command: napari-skimage.make_laplace_widget
-      - command: napari-skimage.make_frangi_widget
-      - command: napari-skimage.make_median_widget
-      - command: napari-skimage.make_butterworth_widget
-      - command: napari-skimage.make_rank_widget
+      - submenu: filtering_submenu
+      - submenu: edge_subemnu
+      - submenu: ridge_submenu
       - submenu: denoising_submenu
       - submenu: thresholding_submenu
       - submenu: morphology_submenu
       - submenu: maths_submenu
     napari/layers/segment:
       - command: napari-skimage.make_connected_components_widget
+    filtering_submenu:
+      - command: napari-skimage.make_gaussian_widget
+      - command: napari-skimage.make_median_widget
+      - command: napari-skimage.make_butterworth_widget
+      - command: napari-skimage.make_rank_widget
+    edge_subemnu:
+      - command: napari-skimage.make_farid_widget
+      - command: napari-skimage.make_prewitt_widget
+      - command: napari-skimage.make_laplace_widget
+    ridge_submenu:
+      - command: napari-skimage.make_frangi_widget
     denoising_submenu:
       - command: napari-skimage.make_rolling_ball_restoration_widget
       - command: napari-skimage.make_denoise_nl_means_restoration_widget
@@ -128,6 +134,12 @@ contributions:
       - command: napari-skimage.make_maths_image_pairs_widget
 
   submenus:
+    - id: filtering_submenu
+      label: Filtering
+    - id: edge_subemnu
+      label: Edge detection
+    - id: ridge_submenu
+      label: Ridge detection
     - id: denoising_submenu
       label: Denoising
     - id: thresholding_submenu
