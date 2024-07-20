@@ -60,6 +60,12 @@ contributions:
     - id: napari-skimage.make_denoise_nl_means_restoration_widget
       python_name: napari_skimage.skimage_restoration_widget:denoise_nl_means_restoration_widget
       title: Make denoise nl means restoration widget
+    - id: napari-skimage.make_peak_local_max_widget
+      python_name: napari_skimage.skimage_detection_widget:peak_local_max_widget
+      title: Make Peak Local Max widget
+    - id: napari-skimage.make_marching_cubes_widget
+      python_name: napari_skimage.skimage_detection_widget:marching_cubes_widget
+      title: Make Marching Cubes widget
   widgets:
     - command: napari-skimage.make_farid_widget
       display_name: Farid filter
@@ -97,6 +103,10 @@ contributions:
       display_name: Rolling ball restoration
     - command: napari-skimage.make_denoise_nl_means_restoration_widget
       display_name: Denoise nl means restoration
+    - command: napari-skimage.make_peak_local_max_widget
+      display_name: Peak Local Max
+    - command: napari-skimage.make_marching_cubes_widget
+      display_name: Marching Cubes
 
   menus:
     napari/layers/filter:
@@ -109,6 +119,9 @@ contributions:
       - submenu: maths_submenu
     napari/layers/segment:
       - command: napari-skimage.make_connected_components_widget
+    napari/layers/layer_type:
+      - command: napari-skimage.make_peak_local_max_widget
+      - command: napari-skimage.make_marching_cubes_widget
     filtering_submenu:
       - command: napari-skimage.make_gaussian_widget
       - command: napari-skimage.make_median_widget

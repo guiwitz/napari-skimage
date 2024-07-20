@@ -1,4 +1,3 @@
-
 from ._version import version as __version__
 try:
     from ._version import version as __version__
@@ -14,6 +13,7 @@ from .skimage_morphology_widget import (connected_components_widget,
 from .skimage_restoration_widget import (rolling_ball_restoration_widget,
                                          denoise_nl_means_restoration_widget)
 from. mathsops import (simple_maths_widget, maths_image_pairs_widget, conversion_widget)
+from .skimage_detection_widget import (peak_local_max_widget, marching_cubes_widget)
 
 __all__ = (
     "farid_filter_widget",
@@ -34,4 +34,6 @@ __all__ = (
     "simple_maths_widget",
     "maths_image_pairs_widget",
     "conversion_widget",
+    "peak_local_max_widget",
+    "marching_cubes_widget",
 )
