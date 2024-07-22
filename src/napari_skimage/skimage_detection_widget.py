@@ -40,13 +40,13 @@ def peak_local_max_widget(
 )
 def marching_cubes_widget(
     label_layer: Labels,
-    label: float = 0.0,
+    label: int = 1,
     binarize: bool = False
 ) -> napari.types.LayerDataTuple:
     if binarize:
-        data = label_layer.data > 0
+        data = (label_layer.data > 0).astype(int)
     else:
-        data = label_layer.data == label
+        data = (label_layer.data == label).astype(int)
     verts, faces, _, _ = marching_cubes(data, level=0.5)
     return (
         (verts, faces.astype(int)),
