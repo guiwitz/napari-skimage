@@ -34,14 +34,20 @@ def peak_local_max_widget(
 
 @magic_factory(
     label_layer={'label': 'Labels'},
-    level={'label': 'Level'},
+    label={'label': 'Label'},
+    binarize={'label': 'Binarize'},
     call_button="Apply Marching Cubes"
 )
 def marching_cubes_widget(
     label_layer: Labels,
-    level: float = 0.0
+    label: float = 0.0,
+    binarize: bool = False
 ) -> napari.types.LayerDataTuple:
-    verts, faces, _, _ = marching_cubes(label_layer.data, level=level)
+    if binarize:
+        data = label_layer.data > 0
+    else:
+        data = label_layer.data == label
+    verts, faces, _, _ = marching_cubes(data, level=0.5)
     return (
         (verts, faces.astype(int)),
         {'name': f'{label_layer.name}_surface'},
