@@ -15,12 +15,21 @@ def test_peak_local_max_widget(make_napari_viewer):
 
 def test_marching_cubes_widget(make_napari_viewer):
     viewer = make_napari_viewer()
-    random_labels = np.random.randint(0, 2, (100, 100, 100), dtype=np.uint8)
-    layer = viewer.add_labels(random_labels)
+    label_image = np.zeros((100, 100, 100), dtype=int)
+    label_image[25:75, 25:75, 25:75] = 1
+    layer = viewer.add_labels(label_image)
 
     my_widget = marching_cubes_widget()
 
     surface, _, _ = my_widget(viewer.layers[0])
+    vertices, faces = surface
+    assert vertices.shape[1] == 3  # Ensure vertices are 3D
+    assert faces.shape[1] == 3  # Ensure faces are triangles
+    assert faces.dtype == np.int32  # Ensure faces are integer type
+
+    my_widget = marching_cubes_widget()
+
+    surface, _, _ = my_widget(viewer.layers[0], binarize=True)
     vertices, faces = surface
     assert vertices.shape[1] == 3  # Ensure vertices are 3D
     assert faces.shape[1] == 3  # Ensure faces are triangles
