@@ -12,15 +12,20 @@ if TYPE_CHECKING:
 @magic_factory(
     image_layer={'label': 'Image'},
     min_distance={'label': 'Minimum Distance'},
-    threshold_abs={'label': 'Threshold Absolute'},
+    threshold_absolute={'label': 'Threshold Absolute'},
+    threshold_relative={'label': 'Threshold Relative', 'min': 0.0, 'max': 1.0},
     call_button="Detect Local Maxima"
 )
 def peak_local_max_widget(
     image_layer: Image,
-    min_distance: int = 1,
-    threshold_abs: float = 0
+    min_distance: int = 10,
+    threshold_absolute: float = 0,
+    threshold_relative: float = 0.0
 ) -> napari.types.LayerDataTuple:
-    coordinates = peak_local_max(image_layer.data, min_distance=min_distance, threshold_abs=threshold_abs)
+    coordinates = peak_local_max(image_layer.data,
+                                 min_distance=min_distance,
+                                 threshold_abs=threshold_absolute,
+                                 threshold_rel=threshold_relative)
     return (
         coordinates,
         {'name': f'{image_layer.name}_local_maxima'},
