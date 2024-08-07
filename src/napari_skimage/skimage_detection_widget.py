@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 @magic_factory(
     image_layer={'label': 'Image'},
     min_distance={'label': 'Minimum Distance'},
-    threshold_absolute={'label': 'Threshold Absolute'},
+    threshold_absolute={'label': 'Threshold Absolute', 'min': 0.0, 'max': 65535},
     threshold_relative={'label': 'Threshold Relative', 'min': 0.0, 'max': 1.0},
     call_button="Detect Local Maxima"
 )
