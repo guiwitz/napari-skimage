@@ -66,6 +66,9 @@ contributions:
     - id: napari-skimage.make_marching_cubes_widget
       python_name: napari_skimage.skimage_detection_widget:marching_cubes_widget
       title: Make Marching Cubes widget
+    - id: napari-skimage.make_marching_cubes_labels_widget
+      python_name: napari_skimage.skimage_detection_widget:marching_cubes_labels_widget
+      title: Make Marching Cubes (labels) widget
   widgets:
     - command: napari-skimage.make_farid_widget
       display_name: Farid filter
@@ -107,6 +110,8 @@ contributions:
       display_name: Peak Local Max
     - command: napari-skimage.make_marching_cubes_widget
       display_name: Marching Cubes
+    - command: napari-skimage.make_marching_cubes_labels_widget
+      display_name: Marching Cubes (labels)
 
   menus:
     napari/layers/filter:
@@ -122,6 +127,7 @@ contributions:
     napari/layers/layer_type:
       - command: napari-skimage.make_peak_local_max_widget
       - command: napari-skimage.make_marching_cubes_widget
+      - command: napari-skimage.make_marching_cubes_labels_widget
     filtering_submenu:
       - command: napari-skimage.make_gaussian_widget
       - command: napari-skimage.make_median_widget

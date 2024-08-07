@@ -24,8 +24,7 @@ def _on_init_peak_local_max(widget):
 
 def _on_init_marching_cubes(widget):
     label_widget = Label(value='')
-    func_name = '_'.join(widget.label.split(' ')[:-1])
-    label_widget.value = f'<a href=\"https://scikit-image.org/docs/stable/api/skimage.measure.html#skimage.measure.{func_name}\">skimage.measure.{func_name}</a>'
+    label_widget.value = '<a href=\"https://scikit-image.org/docs/stable/api/skimage.measure.html#skimage.measure.marching_cubes\">skimage.measure.marching_cubes</a>'
     label_widget.native.setTextFormat(Qt.RichText)
     label_widget.native.setTextInteractionFlags(Qt.TextBrowserInteraction)
     label_widget.native.setOpenExternalLinks(True)
@@ -60,24 +59,36 @@ def peak_local_max_widget(
 
 
 @magic_factory(
-    label_layer={'label': 'Labels'},
-    label={'label': 'Label'},
-    binarize={'label': 'Binarize'},
+    image_layer={'label': 'Image'},
+    level={'label': 'Level', 'min': 0.0, 'max': 65535},
     call_button="Apply Marching Cubes",
     widget_init=_on_init_marching_cubes
 )
 def marching_cubes_widget(
-    label_layer: Labels,
-    label: int = 1,
-    binarize: bool = False
+    image_layer: Image,
+    level: float = 0.5,
 ) -> napari.types.LayerDataTuple:
-    if binarize:
-        data = (label_layer.data > 0).astype(int)
-    else:
-        data = (label_layer.data == label).astype(int)
-    verts, faces, _, _ = marching_cubes(data, level=0.5)
+
+    verts, faces, _, _ = marching_cubes(image_layer.data, level=level)
     return (
         (verts, faces.astype(int)),
-        {'name': f'{label_layer.name}_surface'},
+        {'name': f'{image_layer.name}_surface'},
+        'surface'
+    )
+
+
+@magic_factory(
+    labels_layer={'label': 'Labels'},
+    call_button='Apply Marching Cubes',
+    widget_init=_on_init_marching_cubes
+)
+def marching_cubes_labels_widget(
+    labels_layer: Labels,
+) -> napari.types.LayerDataTuple:
+
+    verts, faces, _, _ = marching_cubes(labels_layer.data > 0, level=0.5)
+    return (
+        (verts, faces.astype(int)),
+        {'name': f'{labels_layer.name}_surface'},
         'surface'
     )
