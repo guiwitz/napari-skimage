@@ -69,7 +69,7 @@ def marching_cubes_widget(
     level: float = 0.5,
 ) -> napari.types.LayerDataTuple:
 
-    verts, faces, _, _ = marching_cubes(image_layer.data, level=level)
+    verts, faces, _, _ = marching_cubes(image_layer.data, level=level, spacing=image_layer.scale)
     return (
         (verts, faces.astype(int)),
         {'name': f'{image_layer.name}_surface'},
