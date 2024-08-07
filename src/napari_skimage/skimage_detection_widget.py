@@ -45,11 +45,13 @@ def peak_local_max_widget(
     min_distance: int = 10,
     threshold_absolute: float = 0,
     threshold_relative: float = 0.0,
+    exclude_border: bool = True,
 ) -> napari.types.LayerDataTuple:
     coordinates = peak_local_max(image_layer.data,
                                  min_distance=min_distance,
                                  threshold_abs=threshold_absolute,
-                                 threshold_rel=threshold_relative)
+                                 threshold_rel=threshold_relative,
+                                 exclude_border=exclude_border)
     return (
         coordinates,
         {'name': f'{image_layer.name}_local_maxima'},
