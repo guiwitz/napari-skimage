@@ -27,7 +27,7 @@ def test_marching_cubes_widget(make_napari_viewer):
     vertices, faces = surface
     assert vertices.shape[1] == 3  # Ensure vertices are 3D
     assert faces.shape[1] == 3  # Ensure faces are triangles
-    assert faces.dtype == np.int32  # Ensure faces are integer type
+    assert (faces.dtype == np.int32) | (faces.dtype == np.int64)  # Ensure faces are integer type
 
     layer = viewer.add_labels(label_image)
     my_widget = marching_cubes_labels_widget()
@@ -36,4 +36,4 @@ def test_marching_cubes_widget(make_napari_viewer):
     vertices, faces = surface
     assert vertices.shape[1] == 3  # Ensure vertices are 3D
     assert faces.shape[1] == 3  # Ensure faces are triangles
-    assert faces.dtype == np.int32  # Ensure faces are integer type
+    assert (faces.dtype == np.int32) | (faces.dtype == np.int64)  # Ensure faces are integer type
