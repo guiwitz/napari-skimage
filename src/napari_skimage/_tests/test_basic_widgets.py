@@ -152,6 +152,20 @@ def test_maths_image_pairs_widget(make_napari_viewer):
         filtered, _, _ = my_widget(viewer.layers[0], viewer.layers[1])
         assert filtered.data.shape == random_image.shape
 
+def test_math_crop_widget(make_napari_viewer):
+    viewer = make_napari_viewer()
+    random_image = np.random.random((100, 100))
+    layer = viewer.add_image(random_image)
+    layer_shapes = viewer.add_shapes([[0, 0],
+                                  [0,10],
+                                  [10,10],
+                                  [10,0]])
+
+    my_widget = nsm.maths_crop_widget()
+
+    croped, _, _ = my_widget(viewer, viewer.layers[0], viewer.layers[1])
+    assert croped.shape == (11,11)
+
 def test_conversion_widget(make_napari_viewer):
     viewer = make_napari_viewer()
     random_image = np.random.random((100, 100))

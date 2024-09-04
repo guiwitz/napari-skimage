@@ -12,7 +12,8 @@ from .skimage_morphology_widget import (connected_components_widget,
                                         binary_morphology_widget, morphology_widget)
 from .skimage_restoration_widget import (rolling_ball_restoration_widget,
                                          denoise_nl_means_restoration_widget)
-from. mathsops import (simple_maths_widget, maths_image_pairs_widget, conversion_widget)
+from. mathsops import (simple_maths_widget, maths_image_pairs_widget,
+                       maths_crop_widget, conversion_widget)
 from .skimage_detection_widget import (peak_local_max_widget,
                                        marching_cubes_widget,
                                        marching_cubes_labels_widget)
@@ -35,6 +36,7 @@ __all__ = (
     "denoise_nl_means_restoration_widget",
     "simple_maths_widget",
     "maths_image_pairs_widget",
+    "maths_crop_widget",
     "conversion_widget",
     "peak_local_max_widget",
     "marching_cubes_widget",

@@ -48,6 +48,9 @@ contributions:
     - id: napari-skimage.make_simple_maths_widget
       python_name: napari_skimage.mathsops:simple_maths_widget
       title: Make simple maths widget
+    - id: napari-skimage.make_maths_crop_widget
+      python_name: napari_skimage.mathsops:maths_crop_widget
+      title: Make maths crop widget
     - id: napari-skimage.make_conversion_widget
       python_name: napari_skimage.mathsops:conversion_widget
       title: Make conversion widget
@@ -96,6 +99,8 @@ contributions:
       display_name: Connected components
     - command: napari-skimage.make_simple_maths_widget
       display_name: Simple maths
+    - command: napari-skimage.make_maths_crop_widget
+      display_name: Crop rectangle
     - command: napari-skimage.make_maths_image_pairs_widget
       display_name: Image pairs maths
     - command: napari-skimage.make_conversion_widget
@@ -151,6 +156,7 @@ contributions:
     maths_submenu:
       - command: napari-skimage.make_simple_maths_widget
       - command: napari-skimage.make_maths_image_pairs_widget
+      - command: napari-skimage.make_maths_crop_widget
 
   submenus:
     - id: filtering_submenu
