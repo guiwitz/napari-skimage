@@ -139,7 +139,6 @@ def maths_crop_widget(
     shapes = shapes_layer.data
     cropped_list = []
     new_layer_index = 0
-    new_name = layer_props["name"] + " cropped [0]"
     names_list = []
     if viewer is not None:
         # Get existing layer names in viewer
@@ -165,7 +164,6 @@ def maths_crop_widget(
     )
     cropped_data = layer_data[slices].copy()
 
-    new_layer_props = layer_props.copy()
     # Update start and stop values for bbox
     start = [slc.start for slc in slices if slc is not None]
     stop = []
@@ -179,10 +177,13 @@ def maths_crop_widget(
     # Add cropped coordinates as metadata
     # bounding box: ([min_z,] min_row, min_col, [max_z,] max_row, max_col)
     # Pixels belonging to the bounding box are in the half-open interval [min_row; max_row) and [min_col; max_col).
+    
+    new_layer_props = layer_props.copy()
+    new_layer_props = dict(layer_props)
     new_layer_props['metadata'] = {'bbox': tuple(start + stop)}
     # apply layer translation scaled by layer scaling factor
     new_layer_props['translate'] = tuple(np.asarray(tuple(start)) * np.asarray(layer_props['scale']))
-
+    
     # If layer name is in viewer or is about to be added,
     # increment layer name until it has a different name
     while True:
@@ -194,8 +195,7 @@ def maths_crop_widget(
             new_layer_index += 1
     new_layer_props["name"] = new_name
     names_list.append(new_name)
-    cropped_list.append((cropped_data, new_layer_props, layer_type))
-
+    
     return (
         cropped_data,
         new_layer_props,
