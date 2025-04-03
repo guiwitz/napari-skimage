@@ -8,6 +8,7 @@ from napari_skimage.skimage_morphology_widget import (
 from napari_skimage.skimage_threshold_widget import threshold_widget, ManualThresholdWidget
 import napari_skimage.skimage_filter_widget as sfw
 import napari_skimage.mathsops as nsm
+from napari_skimage.skimage_label_widget import label_widget
 
 # single fun test
 def test_farid_filter_widget(make_napari_viewer):
@@ -179,3 +180,19 @@ def test_conversion_widget(make_napari_viewer):
 
         filtered, _, _ = my_widget(viewer.layers[0])
         assert filtered.data.shape == random_image.shape
+
+def test_label_widget(make_napari_viewer):
+    viewer = make_napari_viewer()
+    binary = np.array([[0, 0, 0, 0],
+                             [0, 1, 0, 0],
+                             [0, 0, 0, 0],
+                             [0, 0, 1, 0],
+                             [0, 0, 0, 0]])
+    layer = viewer.add_labels(binary)
+
+    # our widget will be a MagicFactory or FunctionGui instance
+    my_widget = label_widget()
+    my_widget()
+
+    assert viewer.layers[1].data.shape == layer.data.shape
+    assert viewer.layers[1].data.max() == 2
