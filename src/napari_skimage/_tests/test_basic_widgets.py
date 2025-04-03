@@ -2,7 +2,6 @@ import numpy as np
 
 from napari_skimage.skimage_morphology_widget import (
     binary_morphology_widget,
-    connected_components_widget,
     morphology_widget
 )
 from napari_skimage.skimage_threshold_widget import threshold_widget, ManualThresholdWidget
@@ -86,17 +85,6 @@ def test_morphology_widget(make_napari_viewer):
 
         filtered, _, _ = my_widget(viewer.layers[0])
         assert filtered.data.shape == random_image.shape
-
-def test_connected_components_widget(make_napari_viewer):
-    viewer = make_napari_viewer()
-    random_image = np.random.randint(0, 10, (100, 100), dtype=np.uint8)
-    layer = viewer.add_labels(random_image)
-
-    # our widget will be a MagicFactory or FunctionGui instance
-    my_widget = connected_components_widget()
-
-    filtered, _, _ = my_widget(viewer.layers[0])
-    assert filtered.data.shape == random_image.shape
 
 def test_thresholding_widget(make_napari_viewer):
     viewer = make_napari_viewer()

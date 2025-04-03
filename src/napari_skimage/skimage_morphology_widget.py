@@ -17,17 +17,6 @@ provided via the _on_init function which first checks if the widget is for binar
 and then creates the appropriate link.
 """
 
-@magic_factory(
-    label_layer={'label': 'Labels'},
-    call_button="Find connected components"
- )
-def connected_components_widget(
-    label_layer: Labels) -> napari.types.LayerDataTuple:
-    return (
-        sm.label(label_layer.data),
-        {'name': f'{label_layer.name}_labels'},
-        'labels')
-
 def _on_init(widget):
     label_widget = Label(value='')   
 
