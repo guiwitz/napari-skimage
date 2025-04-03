@@ -24,9 +24,14 @@ def _on_init_label(widget: "Widget") -> None:
     # Dynamically update the max value of connectivity based on labels_layer.ndim
     @widget.labels_layer.changed.connect
     def update_connectivity_range(event: object) -> None:
-        """Update the max value of connectivity based on labels_layer.ndim"""
+        """Update the max value of connectivity based on labels_layer.ndim
+        
+        Also ensures that the default value of connectivity is set to the
+        ndim, which matches the skimage default behavior."""
         if widget.labels_layer.value is not None:
+            widget.connectivity.value = widget.labels_layer.value.data.ndim
             widget.connectivity.max = widget.labels_layer.value.data.ndim
+
 
     update_connectivity_range(None)  # Initialize the range
 
