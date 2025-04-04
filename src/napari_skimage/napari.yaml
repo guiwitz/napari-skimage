@@ -72,6 +72,9 @@ contributions:
     - id: napari-skimage.make_marching_cubes_labels_widget
       python_name: napari_skimage.skimage_detection_widget:marching_cubes_labels_widget
       title: Make Marching Cubes (labels) widget
+    - id: napari-skimage.make_regionprops_widget
+      python_name: napari_skimage.skimage_regionprops_widget:regionprops_widget
+      title: Make regionprops widget
   widgets:
     - command: napari-skimage.make_farid_widget
       display_name: Farid filter
@@ -117,6 +120,8 @@ contributions:
       display_name: Marching Cubes
     - command: napari-skimage.make_marching_cubes_labels_widget
       display_name: Marching Cubes (labels)
+    - command: napari-skimage.make_regionprops_widget
+      display_name: Regionprops (labels)
 
   menus:
     napari/layers/filter:
