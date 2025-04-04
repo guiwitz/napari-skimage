@@ -132,6 +132,8 @@ contributions:
       - submenu: thresholding_submenu
       - submenu: morphology_submenu
       - submenu: maths_submenu
+    napari/layers/measure:
+      - command: napari-skimage.make_regionprops_widget
     napari/layers/segment:
       - command: napari-skimage.make_connected_components_widget
     napari/layers/layer_type:
