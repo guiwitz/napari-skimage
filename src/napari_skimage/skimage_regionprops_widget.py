@@ -1,15 +1,15 @@
 from typing import TYPE_CHECKING
-from magicgui import magic_factory
-from magicgui.widgets import Table, Label
-from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QAbstractItemView
-from skimage.measure import regionprops_table
-from skimage.measure._regionprops import PROPS
-import pandas as pd
-from napari.layers import Image, Labels
+
 import napari
 import napari.types
+import pandas as pd
+from magicgui import magic_factory
+from magicgui.widgets import Label, Table
+from napari.layers import Image, Labels
 from napari.utils.notifications import show_warning
+from qtpy.QtCore import Qt
+from skimage.measure import regionprops_table
+from skimage.measure._regionprops import PROPS
 
 if TYPE_CHECKING:
     from magicgui.widgets import Widget
@@ -45,7 +45,11 @@ def _on_init(widget: "Widget"):
         labels_layer = widget.labels_layer.value
         if labels_layer:
             is_2d = labels_layer.data.ndim == 2
-            return sorted(available_properties) if is_2d else sorted(valid_properties_3d)
+            return (
+                sorted(available_properties)
+                if is_2d
+                else sorted(valid_properties_3d)
+            )
         else:
             return []
 
@@ -80,6 +84,7 @@ def _on_init(widget: "Widget"):
     update_properties_choices(widget)
     update_analyze_button_state(widget)
 
+
 @magic_factory(
     image_layer={"label": "Intensity Image Layer"},
     labels_layer={"label": "Labels Layer"},
@@ -96,7 +101,9 @@ def regionprops_widget(
 ) -> napari.types.LayerDataTuple:
     """Widget to compute regionprops_table and display results."""
     if labels_layer.data.shape != image_layer.data.shape:
-        show_warning("Labels Layer and Intensity Image must have the same shape.")
+        show_warning(
+            "Labels Layer and Intensity Image must have the same shape."
+        )
         return
 
     # Compute regionprops_table
@@ -110,17 +117,23 @@ def regionprops_widget(
     # Convert to DataFrame
     results_df = pd.DataFrame(props)
 
-    viewer =  napari.current_viewer()
-     # Check if the dock widget exists and is still valid
+    viewer = napari.current_viewer()
+    # Check if the dock widget exists and is still valid
     if (
         not hasattr(regionprops_widget, "_results_dock_widget")
         or regionprops_widget._results_dock_widget.widget is None
     ):
-        regionprops_widget.results_table = Table(value=results_df, name="Results Table")
+        regionprops_widget.results_table = Table(
+            value=results_df, name="Results Table"
+        )
         regionprops_widget.results_table.read_only = True
 
-        regionprops_widget._results_dock_widget = viewer.window.add_dock_widget(
-            regionprops_widget.results_table, area="bottom", name="Results Table"
+        regionprops_widget._results_dock_widget = (
+            viewer.window.add_dock_widget(
+                regionprops_widget.results_table,
+                area="bottom",
+                name="Results Table",
+            )
         )
     else:
         try:
@@ -134,7 +147,10 @@ def regionprops_widget(
             )
             regionprops_widget.results_table.read_only = True
 
-            regionprops_widget._results_dock_widget = viewer.window.add_dock_widget(
-                regionprops_widget.results_table, area="bottom", name="Results Table"
+            regionprops_widget._results_dock_widget = (
+                viewer.window.add_dock_widget(
+                    regionprops_widget.results_table,
+                    area="bottom",
+                    name="Results Table",
+                )
             )
-    
