@@ -9,7 +9,7 @@ from napari.layers import Image, Labels
 from napari.utils.notifications import show_warning
 from qtpy.QtCore import Qt
 from skimage.measure import regionprops_table
-from skimage.measure._regionprops import PROPS
+from skimage.measure._regionprops import PROPS, _require_intensity_image
 
 if TYPE_CHECKING:
     from magicgui.widgets import Widget
@@ -30,7 +30,7 @@ only_2d_properties = {
 valid_properties_3d = available_properties - only_2d_properties
 
 
-def _on_init(widget: "Widget"):
+def _on_init(widget: "Widget") -> None:
     """Initialize the widget, add a hyperlink, and set up connections."""
     # Add a hyperlink to the documentation
     label_widget = Label(value="")
@@ -45,11 +45,12 @@ def _on_init(widget: "Widget"):
         labels_layer = widget.labels_layer.value
         if labels_layer:
             is_2d = labels_layer.data.ndim == 2
-            return (
-                sorted(available_properties)
+            valid_properties = set(available_properties
                 if is_2d
-                else sorted(valid_properties_3d)
-            )
+                else valid_properties_3d)
+            if not widget.image_layer.value:
+                valid_properties = valid_properties - set(_require_intensity_image)
+            return sorted(valid_properties)
         else:
             return []
 
@@ -70,6 +71,8 @@ def _on_init(widget: "Widget"):
                     "Shape mismatch: Labels Layer and Intensity Image must have the same shape."
                 )
             widget.call_button.enabled = shapes_match
+        elif labels_layer:
+            widget.call_button.enabled = True
         else:
             widget.call_button.enabled = False
 
@@ -97,21 +100,31 @@ def _on_init(widget: "Widget"):
     widget_init=_on_init,
 )
 def regionprops_widget(
-    image_layer: Image, labels_layer: Labels, properties: list[str]
+    labels_layer: Labels, image_layer: Image | None, properties: list[str]
 ) -> napari.types.LayerDataTuple:
     """Widget to compute regionprops_table and display results."""
-    if labels_layer.data.shape != image_layer.data.shape:
+
+    # if both image and labels layers are provided, they need to match shape
+    if image_layer and labels_layer and labels_layer.data.shape != image_layer.data.shape:
         show_warning(
             "Labels Layer and Intensity Image must have the same shape."
         )
         return
 
+    # Check for an image layer. If it's absent, 
+    if image_layer:
+        image_layer_data = image_layer.data
+        spacing = image_layer.scale
+    else:
+        image_layer_data = None
+        spacing = None
+
     # Compute regionprops_table
     props = regionprops_table(
         label_image=labels_layer.data,
-        intensity_image=image_layer.data,
+        intensity_image=image_layer_data,
         properties=properties,
-        spacing=image_layer.scale,
+        spacing=spacing,
     )
 
     # Convert to DataFrame
