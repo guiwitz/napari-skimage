@@ -39,9 +39,9 @@ contributions:
     - id: napari-skimage.make_morphology_widget
       python_name: napari_skimage.skimage_morphology_widget:morphology_widget
       title: Make morphology widget
-    - id: napari-skimage.make_connected_components_widget
-      python_name: napari_skimage.skimage_morphology_widget:connected_components_widget
-      title: Make connected components widget
+    - id: napari-skimage.make_label_widget
+      python_name: napari_skimage.skimage_label_widget:label_widget
+      title: Make label connected components widget
     - id: napari-skimage.make_maths_image_pairs_widget
       python_name: napari_skimage.mathsops:maths_image_pairs_widget
       title: Make image pairs maths widget
@@ -95,8 +95,8 @@ contributions:
       display_name: Binary Morphology
     - command: napari-skimage.make_morphology_widget
       display_name: Morphology
-    - command: napari-skimage.make_connected_components_widget
-      display_name: Connected components
+    - command: napari-skimage.make_label_widget
+      display_name: Label connected components
     - command: napari-skimage.make_simple_maths_widget
       display_name: Simple maths
     - command: napari-skimage.make_maths_crop_widget
@@ -128,7 +128,7 @@ contributions:
       - submenu: morphology_submenu
       - submenu: maths_submenu
     napari/layers/segment:
-      - command: napari-skimage.make_connected_components_widget
+      - command: napari-skimage.make_label_widget
     napari/layers/layer_type:
       - command: napari-skimage.make_peak_local_max_widget
       - command: napari-skimage.make_marching_cubes_widget
