@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 import napari
 import napari.types
@@ -41,7 +41,7 @@ def _on_init(widget: "Widget") -> None:
     widget.extend([label_widget])
 
     # Define a function to get valid properties dynamically
-    def get_valid_properties(widget: "Widget"):
+    def get_valid_properties(widget: "Widget") -> Union(list, None):
         labels_layer = widget.labels_layer.value
         if labels_layer:
             is_2d = labels_layer.data.ndim == 2
@@ -55,12 +55,12 @@ def _on_init(widget: "Widget") -> None:
             return []
 
     # Update the properties choices dynamically
-    def update_properties_choices(event: object):
+    def update_properties_choices(event: object) -> None:
         widget.properties.choices = []
         widget.properties.reset_choices()
 
     # Enable or disable the Analyze button based on input validation
-    def update_analyze_button_state(event: object):
+    def update_analyze_button_state(event: object) -> None:
         labels_layer = widget.labels_layer.value
         image_layer = widget.image_layer.value
 
@@ -100,7 +100,7 @@ def _on_init(widget: "Widget") -> None:
     widget_init=_on_init,
 )
 def regionprops_widget(
-    labels_layer: Labels, image_layer: Image | None, properties: list[str]
+    labels_layer: Labels, image_layer: Union(Image, None), properties: list[str]
 ) -> napari.types.LayerDataTuple:
     """Widget to compute regionprops_table and display results."""
 
@@ -111,7 +111,7 @@ def regionprops_widget(
         )
         return
 
-    # Check for an image layer. If it's absent, 
+    # Check for an image layer. If it's absent,
     if image_layer:
         image_layer_data = image_layer.data
         spacing = image_layer.scale
