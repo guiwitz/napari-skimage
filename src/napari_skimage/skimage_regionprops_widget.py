@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Optional
 
 import napari
 import napari.types
@@ -41,7 +41,7 @@ def _on_init(widget: "Widget") -> None:
     widget.extend([label_widget])
 
     # Define a function to get valid properties dynamically
-    def get_valid_properties(widget: "Widget") -> Union(list, None):
+    def get_valid_properties(widget: "Widget") -> Optional[list]:
         labels_layer = widget.labels_layer.value
         if labels_layer:
             is_2d = labels_layer.data.ndim == 2
@@ -100,7 +100,7 @@ def _on_init(widget: "Widget") -> None:
     widget_init=_on_init,
 )
 def regionprops_widget(
-    labels_layer: Labels, image_layer: Union(Image, None), properties: list[str]
+    labels_layer: Labels, image_layer: Optional[Image], properties: list[str]
 ) -> napari.types.LayerDataTuple:
     """Widget to compute regionprops_table and display results."""
 
