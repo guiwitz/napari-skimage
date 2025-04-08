@@ -170,23 +170,15 @@ def test_conversion_widget(make_napari_viewer):
         filtered, _, _ = my_widget(viewer.layers[0])
         assert filtered.data.shape == random_image.shape
 
-@pytest.mark.parametrize(
-    "labels_layer, background",
-    [
-        # 2D binary array with background 0
-        (
-            np.array([
+_2D_BINARY_ARRAY = np.array([
                 [0, 0, 0, 0],
                 [0, 1, 0, 0],
                 [0, 0, 0, 0],
                 [0, 0, 1, 0],
                 [0, 0, 0, 0],
-            ]),
-            0,
-        ),
-        # 3D binary array with background 0
-        (
-            np.array([
+            ])
+
+_3D_BINARY_ARRAY = np.array([
                 [
                     [0, 0, 0, 0],
                     [0, 0, 0, 0],
@@ -208,7 +200,19 @@ def test_conversion_widget(make_napari_viewer):
                     [0, 0, 0, 0],
                     [0, 0, 0, 0],
                 ],
-            ]),
+            ])
+
+@pytest.mark.parametrize(
+    "labels_layer, background",
+    [
+        # 2D binary array with background 0
+        (
+            _2D_BINARY_ARRAY,
+            0,
+        ),
+        # 3D binary array with background 0
+        (
+            _3D_BINARY_ARRAY,
             0,
         ),
         # 2D labels array with background 1
@@ -248,3 +252,29 @@ def test_label_widget(make_napari_viewer, labels_layer, background):
         assert viewer.layers[1].data.ravel()[0] == 0
     else:
         assert viewer.layers[1].data.ravel()[0] == 1
+
+def test_label_widget_connectivity(make_napari_viewer):
+    viewer = make_napari_viewer()
+    # Start with 2D layer
+    layer_2D = viewer.add_labels(_2D_BINARY_ARRAY)
+    my_widget = label_widget()
+    my_widget()
+
+    # 2D layer -> connectivity should be 2
+    assert my_widget.connectivity.max == 2
+    assert my_widget.connectivity.value == 2
+
+
+    # Now add 3D layer
+    layer_3D = viewer.add_labels(_3D_BINARY_ARRAY)
+    my_widget.labels_layer.reset_choices()
+    my_widget.labels_layer.value = layer_3D
+
+    # 3D layer -> connectivity should be 3
+    assert my_widget.connectivity.max == 3
+    assert my_widget.connectivity.value == 3
+
+    # switch back to 2D
+    my_widget.labels_layer.value = layer_2D
+    assert my_widget.connectivity.max == 2
+    assert my_widget.connectivity.value == 2
