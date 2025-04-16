@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING, Optional
+from functools import partial
 
 import napari
 import napari.types
@@ -167,3 +168,14 @@ def regionprops_widget(
                     name="Results Table",
                 )
             )
+
+    def clicked_table(widget):
+        if "label" in widget.results_table.column_headers:
+            row = widget.results_table.native.currentRow()
+            label = int(widget.results_table["label"][row])
+            print("Table clicked, set label", label)
+            widget.labels_layer.value.selected_label = label
+
+    regionprops_widget.results_table.native.clicked.connect(
+        partial(clicked_table, regionprops_widget)
+    )
