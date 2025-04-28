@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING, Optional
-from functools import partial
 
 import napari
 import napari.types
 import pandas as pd
+from qtpy.QtWidgets import QFileDialog
 from magicgui import magic_factory
-from magicgui.widgets import Label, Table
+from magicgui.widgets import Label, Table, Button
 from napari.layers import Image, Labels
 from napari.utils.notifications import show_warning
 from qtpy.QtCore import Qt
@@ -33,6 +33,10 @@ valid_properties_3d = available_properties - only_2d_properties
 
 def _on_init(widget: "Widget") -> None:
     """Initialize the widget, add a hyperlink, and set up connections."""
+    
+    widget.save_button = Button(enabled=False, text='Save Results')
+    widget.extend([widget.save_button])
+
     # Add a hyperlink to the documentation
     label_widget = Label(value="")
     label_widget.value = '<a href="https://scikit-image.org/docs/stable/api/skimage.measure.html#skimage.measure.regionprops_table">skimage.measure.regionprops_table</a>'
@@ -83,7 +87,20 @@ def _on_init(widget: "Widget") -> None:
             label = int(widget.results_table["label"][row])
             print("Table clicked, set label", label)
             widget.labels_layer.value.selected_label = label
+
+    def save_table(event: object):
+        
+        widget.results_table.to_dataframe().to_csv(
+            QFileDialog.getSaveFileName(
+                widget.native,
+                "Save Results",
+                ".",
+                "CSV Files (*.csv);;All Files (*)",
+            )[0],
+            index=False,
+        )
     
+    # initialize table
     widget.results_table = Table(name="Results Table")
 
     # Connect the signals to the update functions
@@ -92,6 +109,7 @@ def _on_init(widget: "Widget") -> None:
     widget.labels_layer.changed.connect(update_analyze_button_state)
     widget.image_layer.changed.connect(update_analyze_button_state)
     widget.results_table.native.clicked.connect(clicked_table)
+    widget.save_button.clicked.connect(save_table)
 
     # initialize Select widget and button state
     widget.properties._default_choices = lambda _: get_valid_properties(widget)
@@ -141,6 +159,9 @@ def regionprops_widget(
     # Convert to DataFrame
     results_df = pd.DataFrame(props)
 
+    # Enable save button
+    regionprops_widget.save_button.enabled = True
+
     viewer = napari.current_viewer()
     # Check if the dock widget exists and is still valid
     if (
@@ -158,7 +179,6 @@ def regionprops_widget(
             )
         )
     else:
-        
         try:
             regionprops_widget.results_table.value = results_df
             regionprops_widget.results_table.read_only = True
