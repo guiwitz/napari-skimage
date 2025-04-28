@@ -89,16 +89,22 @@ def _on_init(widget: "Widget") -> None:
             widget.labels_layer.value.selected_label = label
 
     def save_table(event: object):
-        
-        widget.results_table.to_dataframe().to_csv(
-            QFileDialog.getSaveFileName(
+        # get file path from user
+        file_path = QFileDialog.getSaveFileName(
                 widget.native,
                 "Save Results",
                 ".",
                 "CSV Files (*.csv);;All Files (*)",
-            )[0],
-            index=False,
-        )
+            )[0]
+
+        # if the user cancels the dialog, file_path will be None, so we return
+        if not file_path:
+            return
+
+        widget.results_table.to_dataframe().to_csv(
+                file_path,
+                index=False,
+            )
     
     # initialize table
     widget.results_table = Table(name="Results Table")
