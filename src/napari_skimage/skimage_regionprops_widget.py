@@ -2,12 +2,13 @@ from typing import TYPE_CHECKING, Optional
 
 import napari
 import napari.types
+import numpy as np
 import pandas as pd
 from qtpy.QtWidgets import QFileDialog
 from magicgui import magic_factory
 from magicgui.widgets import Label, Table, Button
 from napari.layers import Image, Labels
-from napari.utils.notifications import show_warning
+from napari.utils.notifications import show_info, show_warning
 from qtpy.QtCore import Qt
 from skimage.measure import regionprops_table
 from skimage.measure._regionprops import PROPS, _require_intensity_image
@@ -90,11 +91,15 @@ def _on_init(widget: "Widget") -> None:
             widget.call_button.enabled = False
 
     def clicked_table(event: object):
+        row = widget.results_table.native.currentRow()
         if "label" in widget.results_table.column_headers:
-            row = widget.results_table.native.currentRow()
             label = int(widget.results_table["label"][row])
-            print("Table clicked, set label", label)
-            widget.labels_layer.value.selected_label = label
+        else:
+            # If the label column is not present, use the row index
+            # plus one to account for zero-based indexing
+            label = np.unique(widget.labels_layer.value.data)[row+1]
+        show_info(f"Table clicked, set label: {label}")
+        widget.labels_layer.value.selected_label = label
 
     def save_table(event: object):
         # get file path from user
