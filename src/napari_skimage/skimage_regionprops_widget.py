@@ -77,11 +77,21 @@ def _on_init(widget: "Widget") -> None:
         else:
             widget.call_button.enabled = False
 
+    def clicked_table(event: object):
+        if "label" in widget.results_table.column_headers:
+            row = widget.results_table.native.currentRow()
+            label = int(widget.results_table["label"][row])
+            print("Table clicked, set label", label)
+            widget.labels_layer.value.selected_label = label
+    
+    widget.results_table = Table(name="Results Table")
+
     # Connect the signals to the update functions
     widget.labels_layer.changed.connect(update_properties_choices)
     widget.image_layer.changed.connect(update_properties_choices)
     widget.labels_layer.changed.connect(update_analyze_button_state)
     widget.image_layer.changed.connect(update_analyze_button_state)
+    widget.results_table.native.clicked.connect(clicked_table)
 
     # initialize Select widget and button state
     widget.properties._default_choices = lambda _: get_valid_properties(widget)
@@ -137,9 +147,7 @@ def regionprops_widget(
         not hasattr(regionprops_widget, "_results_dock_widget")
         or regionprops_widget._results_dock_widget.widget is None
     ):
-        regionprops_widget.results_table = Table(
-            value=results_df, name="Results Table"
-        )
+        regionprops_widget.results_table.value = results_df
         regionprops_widget.results_table.read_only = True
 
         regionprops_widget._results_dock_widget = (
@@ -150,15 +158,14 @@ def regionprops_widget(
             )
         )
     else:
+        
         try:
             regionprops_widget.results_table.value = results_df
             regionprops_widget.results_table.read_only = True
 
             regionprops_widget._results_dock_widget.show()
         except RuntimeError:
-            regionprops_widget.results_table = Table(
-                value=results_df, name="Results Table"
-            )
+            regionprops_widget.results_table.value = results_df
             regionprops_widget.results_table.read_only = True
 
             regionprops_widget._results_dock_widget = (
@@ -168,14 +175,3 @@ def regionprops_widget(
                     name="Results Table",
                 )
             )
-
-    def clicked_table(widget):
-        if "label" in widget.results_table.column_headers:
-            row = widget.results_table.native.currentRow()
-            label = int(widget.results_table["label"][row])
-            print("Table clicked, set label", label)
-            widget.labels_layer.value.selected_label = label
-
-    regionprops_widget.results_table.native.clicked.connect(
-        partial(clicked_table, regionprops_widget)
-    )
