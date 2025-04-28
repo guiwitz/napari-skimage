@@ -61,8 +61,16 @@ def _on_init(widget: "Widget") -> None:
 
     # Update the properties choices dynamically
     def update_properties_choices(event: object) -> None:
+        previously_selected_properties = widget.properties.value
         widget.properties.choices = []
         widget.properties.reset_choices()
+        try:
+            widget.properties.value = previously_selected_properties
+        # if you switch from 2D to 3D, the properties will be different
+        # and the previously selected properties might not be valid,
+        # so then reset them
+        except ValueError:
+            widget.properties.value = []
 
     # Enable or disable the Analyze button based on input validation
     def update_analyze_button_state(event: object) -> None:
