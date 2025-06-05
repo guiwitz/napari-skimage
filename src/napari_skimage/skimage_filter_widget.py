@@ -115,9 +115,9 @@ def frangi_filter_widget(
 )
 def median_filter_widget(
     img_layer: Image,
-    footprint = "disk",
-    footprint_size = 3,
-    mode = "nearest"
+    footprint: str = "disk",
+    footprint_size: int = 3,
+    mode: str = "nearest"
 ) -> napari.types.LayerDataTuple:
     fun_footprint = getattr(sm, footprint)
     selem = fun_footprint(footprint_size)
