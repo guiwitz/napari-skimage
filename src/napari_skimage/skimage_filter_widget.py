@@ -36,7 +36,7 @@ def _on_init(widget):
         widget_init=_on_init
         )
 def farid_filter_widget(
-    image_layer: Image, mode='reflect') -> napari.types.LayerDataTuple:
+    image_layer: Image, mode: str ='reflect') -> napari.types.LayerDataTuple:
     return (
         sf.farid(image_layer.data, mode=mode),
         {'name': f'{image_layer.name}_farid'},
@@ -49,7 +49,7 @@ def farid_filter_widget(
         widget_init=_on_init
         )
 def prewitt_filter_widget(
-    image_layer: Image, mode='reflect') -> napari.types.LayerDataTuple:
+    image_layer: Image, mode: str ='reflect') -> napari.types.LayerDataTuple:
     return (
         sf.prewitt(image_layer.data, mode=mode),
         {'name': f'{image_layer.name}_prewitt'},
@@ -78,7 +78,7 @@ def gaussian_filter_widget(
     img_layer: Image,
     sigma: float = 1.0,
     preserve_range: bool = False,
-    mode = "reflect",
+    mode: str = "reflect",
 ) -> napari.types.LayerDataTuple:
     return (
         sf.gaussian(img_layer.data, sigma=sigma, preserve_range=preserve_range, mode=mode),
@@ -96,7 +96,7 @@ def frangi_filter_widget(
     scale_start: float = 1.0,
     scale_end: float = 10.0,
     scale_step: float = 2.0,
-    mode = "reflect",
+    mode: str = "reflect",
     black_ridges: bool = True,
 ) -> napari.types.LayerDataTuple:
     return (
@@ -115,9 +115,9 @@ def frangi_filter_widget(
 )
 def median_filter_widget(
     img_layer: Image,
-    footprint = "disk",
-    footprint_size = 3,
-    mode = "nearest"
+    footprint: str = "disk",
+    footprint_size: int = 3,
+    mode: str = "nearest"
 ) -> napari.types.LayerDataTuple:
     fun_footprint = getattr(sm, footprint)
     selem = fun_footprint(footprint_size)
