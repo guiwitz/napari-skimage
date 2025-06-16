@@ -77,7 +77,7 @@ def conversion_widget(
         'image')
 
 """
-The code for the maths_crop_widget has been directly adapated from the napari-crop
+The code for the maths_crop_widget has been directly adapted from the napari-crop
 plugin (https://github.com/BiAPoL/napari-crop/). The original code is licensed under
 the BSD 3-Clause License reproduced below:
 
@@ -112,7 +112,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 @magic_factory(
         image_layer={'label': 'Image'},
-        shapes_layer={'label': 'Image 2'},
+        shapes_layer={'label': 'Shape'},
         call_button="Crop rectangle"
         )
 def maths_crop_widget(
