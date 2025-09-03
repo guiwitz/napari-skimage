@@ -75,6 +75,9 @@ contributions:
     - id: napari-skimage.make_regionprops_widget
       python_name: napari_skimage.skimage_regionprops_widget:regionprops_widget
       title: Make regionprops widget
+    - id: napari-skimage.make_axis_widget
+      python_name: napari_skimage.axis_ops:AxisWidget
+      title: Make axis operations widget
   widgets:
     - command: napari-skimage.make_farid_widget
       display_name: Farid filter
@@ -122,6 +125,8 @@ contributions:
       display_name: Marching Cubes (labels)
     - command: napari-skimage.make_regionprops_widget
       display_name: Regionprops (labels)
+    - command: napari-skimage.make_axis_widget
+      display_name: Axis operations
 
   menus:
     napari/layers/filter:
