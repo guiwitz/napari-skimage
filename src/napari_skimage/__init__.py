@@ -17,6 +17,7 @@ from .skimage_detection_widget import (peak_local_max_widget,
                                        marching_cubes_widget,
                                        marching_cubes_labels_widget)
 from .skimage_label_widget import label_widget
+from .axis_ops import AxisWidget
 
 __all__ = (
     "farid_filter_widget",
@@ -41,4 +42,5 @@ __all__ = (
     "marching_cubes_widget",
     "marching_cubes_labels_widget",
     "label_widget",
+    "AxisWidget",
 )
