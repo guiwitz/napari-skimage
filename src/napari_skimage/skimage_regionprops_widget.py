@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from qtpy.QtWidgets import QFileDialog
 from magicgui import magic_factory
-from magicgui.widgets import Label, Table, Button
+from magicgui.widgets import Label, Table, Button, CheckBox, ComboBox
 from napari.layers import Image, Labels
 from napari.utils.notifications import show_info, show_warning
 from qtpy.QtCore import Qt
@@ -34,7 +34,12 @@ valid_properties_3d = available_properties - only_2d_properties
 
 def _on_init(widget: "Widget") -> None:
     """Initialize the widget, add a hyperlink, and set up connections."""
-    
+    # Controls for per-slice analysis
+    widget.per_slice = CheckBox(text="Per-slice (frame) analysis", value=False)
+    widget.slice_axis = ComboBox(label="Axis", choices=[0], value=0, enabled=False)
+    widget.extend([widget.per_slice, widget.slice_axis])
+
+    # Save button
     widget.save_button = Button(enabled=False, text='Save Results')
     widget.extend([widget.save_button])
 
@@ -50,28 +55,22 @@ def _on_init(widget: "Widget") -> None:
     def get_valid_properties(widget: "Widget") -> Optional[list]:
         labels_layer = widget.labels_layer.value
         if labels_layer:
-            is_2d = labels_layer.data.ndim == 2
-            valid_properties = set(available_properties
-                if is_2d
-                else valid_properties_3d)
+            # Treat as 2D when per-slice is enabled on >=3D labels
+            is_2d = (labels_layer.data.ndim == 2) or (
+                widget.per_slice.value and labels_layer.data.ndim >= 3
+            )
+            valid_props = set(available_properties if is_2d else valid_properties_3d)
             if not widget.image_layer.value:
-                valid_properties = valid_properties - set(_require_intensity_image)
-            return sorted(valid_properties)
+                valid_props = valid_props - set(_require_intensity_image)
+            return sorted(valid_props)
         else:
             return []
 
     # Update the properties choices dynamically
     def update_properties_choices(event: object) -> None:
-        previously_selected_properties = widget.properties.value
-        widget.properties.choices = []
-        widget.properties.reset_choices()
-        try:
-            widget.properties.value = previously_selected_properties
-        # if you switch from 2D to 3D, the properties will be different
-        # and the previously selected properties might not be valid,
-        # so then reset them
-        except ValueError:
-            widget.properties.value = []
+        if hasattr(widget, "properties"):
+            widget.properties._default_choices = lambda _: get_valid_properties(widget)
+            widget.properties.reset_choices()
 
     # Enable or disable the Analyze button based on input validation
     def update_analyze_button_state(event: object) -> None:
@@ -90,6 +89,20 @@ def _on_init(widget: "Widget") -> None:
         else:
             widget.call_button.enabled = False
 
+    # Update axis selector enablement/choices
+    def update_axis_controls(event: object) -> None:
+        labels_layer = widget.labels_layer.value
+        enable_axis = (
+            widget.per_slice.value and labels_layer and labels_layer.data.ndim >= 3
+        )
+        widget.slice_axis.enabled = bool(enable_axis)
+        if enable_axis:
+            ndim = labels_layer.data.ndim
+            choices = list(range(ndim))
+            widget.slice_axis.choices = choices
+            if widget.slice_axis.value not in choices:
+                widget.slice_axis.value = 0
+
     def clicked_table(event: object):
         row = widget.results_table.native.currentRow()
         if "label" in widget.results_table.column_headers:
@@ -97,9 +110,21 @@ def _on_init(widget: "Widget") -> None:
         else:
             # If the label column is not present, use the row index
             # plus one to account for zero-based indexing
-            label = np.unique(widget.labels_layer.value.data)[row+1]
+            label = np.unique(widget.labels_layer.value.data)[row + 1]
         show_info(f"Table clicked, set label: {label}")
         widget.labels_layer.value.selected_label = label
+
+        # If a frame column exists, set the viewer to that frame along selected axis
+        if "frame" in widget.results_table.column_headers and widget.per_slice.value:
+            try:
+                frame = int(widget.results_table["frame"][row])
+                axis = int(widget.slice_axis.value)
+                viewer = napari.current_viewer()
+                if viewer is not None and 0 <= axis < viewer.dims.ndim:
+                    viewer.dims.set_current_step(axis, frame)
+            except Exception:
+                # Avoid breaking on click if dims setting fails
+                pass
 
     def save_table(event: object):
         # get file path from user
@@ -118,7 +143,7 @@ def _on_init(widget: "Widget") -> None:
                 file_path,
                 index=False,
             )
-    
+
     # initialize table
     widget.results_table = Table(name="Results Table")
 
@@ -127,11 +152,16 @@ def _on_init(widget: "Widget") -> None:
     widget.image_layer.changed.connect(update_properties_choices)
     widget.labels_layer.changed.connect(update_analyze_button_state)
     widget.image_layer.changed.connect(update_analyze_button_state)
+    widget.labels_layer.changed.connect(update_axis_controls)
+    widget.per_slice.changed.connect(update_axis_controls)
+    widget.per_slice.changed.connect(update_properties_choices)
+
     widget.results_table.native.clicked.connect(clicked_table)
     widget.save_button.clicked.connect(save_table)
 
     # initialize Select widget and button state
     widget.properties._default_choices = lambda _: get_valid_properties(widget)
+    update_axis_controls(widget)
     update_properties_choices(widget)
     update_analyze_button_state(widget)
 
@@ -167,16 +197,57 @@ def regionprops_widget(
         image_layer_data = None
         spacing = None
 
-    # Compute regionprops_table
-    props = regionprops_table(
-        label_image=labels_layer.data,
-        intensity_image=image_layer_data,
-        properties=properties,
-        spacing=spacing,
-    )
+    # Compute regionprops_table with optional per-slice (frame) analysis
+    per_slice = getattr(regionprops_widget, "per_slice", None)
+    slice_axis_widget = getattr(regionprops_widget, "slice_axis", None)
+    do_per_slice = False
+    axis = 0
+    try:
+        do_per_slice = bool(per_slice.value) if per_slice is not None else False
+        axis = int(slice_axis_widget.value) if slice_axis_widget is not None else 0
+    except Exception:
+        do_per_slice = False
+        axis = 0
 
-    # Convert to DataFrame
-    results_df = pd.DataFrame(props)
+    if do_per_slice and labels_layer.data.ndim >= 3:
+        n_slices = labels_layer.data.shape[axis]
+        dfs = []
+        for i in range(n_slices):
+            labels_slice = np.take(labels_layer.data, i, axis=axis)
+            if image_layer_data is not None:
+                intensity_slice = np.take(image_layer_data, i, axis=axis)
+            else:
+                intensity_slice = None
+
+            # Derive 2D spacing per slice when possible
+            if spacing is not None and len(spacing) == labels_layer.data.ndim:
+                spacing_slice = tuple(
+                    spacing[j] for j in range(len(spacing)) if j != axis
+                )
+                if len(spacing_slice) != labels_slice.ndim:
+                    spacing_slice = None
+            else:
+                spacing_slice = None
+
+            props = regionprops_table(
+                label_image=labels_slice,
+                intensity_image=intensity_slice,
+                properties=properties,
+                spacing=spacing_slice,
+            )
+            df = pd.DataFrame(props)
+            df.insert(0, "frame", i)
+            dfs.append(df)
+
+        results_df = pd.concat(dfs, ignore_index=True) if dfs else pd.DataFrame()
+    else:
+        props = regionprops_table(
+            label_image=labels_layer.data,
+            intensity_image=image_layer_data,
+            properties=properties,
+            spacing=spacing,
+        )
+        results_df = pd.DataFrame(props)
 
     # Enable save button
     regionprops_widget.save_button.enabled = True
@@ -185,6 +256,7 @@ def regionprops_widget(
     # Check if the dock widget exists and is still valid
     if (
         not hasattr(regionprops_widget, "_results_dock_widget")
+        or regionprops_widget._results_dock_widget is None
         or regionprops_widget._results_dock_widget.widget is None
     ):
         regionprops_widget.results_table.value = results_df
