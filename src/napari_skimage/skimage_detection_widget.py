@@ -1,4 +1,3 @@
-from email.mime import image
 from typing import TYPE_CHECKING
 import numpy as np
 from magicgui import magic_factory
@@ -9,7 +8,6 @@ from skimage.feature import peak_local_max
 from skimage.measure import marching_cubes
 from napari.layers import Image, Labels
 import napari.types
-import scipy.ndimage
 
 if TYPE_CHECKING:
     import napari
@@ -35,7 +33,6 @@ def _on_init_marching_cubes(widget):
 
 def _on_init(widget):
     label_widget = Label(value='')
-    func_name = widget.label.split(' ')[0]
     if widget.label == 'watershed widget':
         label_widget.value = f'<a href=\"https://scikit-image.org/docs/0.25.x/api/skimage.segmentation.html#skimage.segmentation.watershed\">skimage.segmentation.watershed</a>'
     elif widget.label == 'marching cubes widget' or widget.label == 'marching cubes labels widget':

@@ -1,4 +1,3 @@
-from re import I, L
 from typing import TYPE_CHECKING
 
 import numpy as np
@@ -9,7 +8,7 @@ import scipy
 import scipy.ndimage
 import skimage.filters as sf
 import skimage.morphology as sm
-from napari.layers import Image, Labels, Layer
+from napari.layers import Image, Layer
 import napari.types
 
 
