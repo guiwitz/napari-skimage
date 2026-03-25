@@ -15,8 +15,9 @@ from. mathsops import (simple_maths_widget, maths_image_pairs_widget,
                        maths_crop_widget, conversion_widget)
 from .skimage_detection_widget import (peak_local_max_widget,
                                        marching_cubes_widget,
-                                       marching_cubes_labels_widget)
-from .skimage_label_widget import label_widget
+                                       marching_cubes_labels_widget,
+                                       watershed_widget)
+from .skimage_label_widget import label_widget, points_to_label_widget
 from .axis_ops import AxisWidget
 
 __all__ = (
@@ -27,6 +28,7 @@ __all__ = (
     "frangi_filter_widget",
     "median_filter_widget",
     "butterworth_filter_widget",
+    "distance_transform_widget",
     "RankFilterWidget",
     "threshold_widget",
     "ManualThresholdWidget",
@@ -41,6 +43,8 @@ __all__ = (
     "peak_local_max_widget",
     "marching_cubes_widget",
     "marching_cubes_labels_widget",
+    "watershed_widget",
     "label_widget",
+    "points_to_label_widget",
     "AxisWidget",
 )

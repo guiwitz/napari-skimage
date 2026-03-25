@@ -1,12 +1,15 @@
+from email.mime import image
 from typing import TYPE_CHECKING
 import numpy as np
 from magicgui import magic_factory
 from qtpy.QtCore import Qt
 from magicgui.widgets import Label
+import skimage
 from skimage.feature import peak_local_max
 from skimage.measure import marching_cubes
 from napari.layers import Image, Labels
 import napari.types
+import scipy.ndimage
 
 if TYPE_CHECKING:
     import napari
@@ -25,6 +28,18 @@ def _on_init_peak_local_max(widget):
 def _on_init_marching_cubes(widget):
     label_widget = Label(value='')
     label_widget.value = '<a href=\"https://scikit-image.org/docs/stable/api/skimage.measure.html#skimage.measure.marching_cubes\">skimage.measure.marching_cubes</a>'
+    label_widget.native.setTextFormat(Qt.RichText)
+    label_widget.native.setTextInteractionFlags(Qt.TextBrowserInteraction)
+    label_widget.native.setOpenExternalLinks(True)
+    widget.extend([label_widget])
+
+def _on_init(widget):
+    label_widget = Label(value='')
+    func_name = widget.label.split(' ')[0]
+    if widget.label == 'watershed widget':
+        label_widget.value = f'<a href=\"https://scikit-image.org/docs/0.25.x/api/skimage.segmentation.html#skimage.segmentation.watershed\">skimage.segmentation.watershed</a>'
+    elif widget.label == 'marching cubes widget' or widget.label == 'marching cubes labels widget':
+        label_widget.value = f'<a href=\"https://scikit-image.org/docs/stable/api/skimage.measure.html#skimage.measure.marching_cubes\">skimage.measure.marching_cubes</a>'
     label_widget.native.setTextFormat(Qt.RichText)
     label_widget.native.setTextInteractionFlags(Qt.TextBrowserInteraction)
     label_widget.native.setOpenExternalLinks(True)
@@ -92,3 +107,22 @@ def marching_cubes_labels_widget(
         {'name': f'{labels_layer.name}_surface'},
         'surface'
     )
+
+@magic_factory(
+        image_layer={'label': 'Image'},
+        label_layer={'label': 'Label'},
+        invert_image={'label': 'Invert Image'},
+        call_button="Apply Watershed",
+        widget_init=_on_init
+)
+def watershed_widget(
+    image_layer: Image,
+    label_layer: Labels,
+    mask_layer: Labels,
+    invert_image: bool = False
+) -> napari.types.LayerDataTuple:
+    sign = -1 if invert_image else 1
+    return (
+        skimage.segmentation.watershed(sign * image_layer.data, markers=label_layer.data, mask=mask_layer.data),
+        {'name': f'{label_layer.name}_watershed'},
+        'image')

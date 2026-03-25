@@ -3,10 +3,11 @@ from typing import TYPE_CHECKING
 import napari.types
 from magicgui import magic_factory
 from magicgui.widgets import Label
-from napari.layers import Labels
+from napari.layers import Image, Labels, Points
 from napari.utils.notifications import show_info
 from qtpy.QtCore import Qt
 from skimage.measure import label
+import skimage.util
 
 if TYPE_CHECKING:
     import napari
@@ -36,6 +37,18 @@ def _on_init_label(widget: "Widget") -> None:
 
     update_connectivity_range(None)  # Initialize the range
 
+def _on_init(widget):
+    label_widget = Label(value='')
+    func_name = widget.label.split(' ')[0]
+    if widget.label == 'points to label widget':
+        label_widget.value = f'<a href=\"https://scikit-image.org/docs/stable/api/skimage.util.html#skimage.util.label_points\">skimage.util.label_points</a>'
+    else:
+        label_widget.value = 'None'
+    label_widget.native.setTextFormat(Qt.RichText)
+    label_widget.native.setTextInteractionFlags(Qt.TextBrowserInteraction)
+    label_widget.native.setOpenExternalLinks(True)
+    widget.extend([label_widget])
+
 
 @magic_factory(
     labels_layer={"label": "Labels Layer"},
@@ -60,3 +73,21 @@ def label_widget(
         {"name": f"{labels_layer.name}_labeled"},
         "labels",
     )
+
+@magic_factory(
+    points_layer={"label": "Points Layer"},
+    image_layer={"label": "Image Layer"},
+    call_button="Convert Points to Labels",
+    widget_init=_on_init,
+)
+def points_to_label_widget(
+    points_layer: Points,
+    image_layer: Image,
+) -> napari.types.LayerDataTuple:
+    labeled_points = skimage.util.label_points(points_layer.data, image_layer.data.shape)
+    return (
+        (labeled_points,),
+        {"name": f"{points_layer.name}_labeled"},
+        "labels",
+    )
+
