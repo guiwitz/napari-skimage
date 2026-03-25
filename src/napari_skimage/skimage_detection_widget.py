@@ -105,6 +105,23 @@ def watershed_widget(
     watershed_lines: bool = False,
     invert_image: bool = False
 ) -> napari.types.LayerDataTuple:
+    
+    """We can use numpy docstrings to provide tooltips.
+
+    Parameters
+    ----------
+    image_layer : napari.layers.Image
+        The image to segment, typically a distance transform or gradient image.
+    label_layer : napari.layers.Labels
+        The markers for watershed, typically a labeled image of local maxima.
+    mask_layer : napari.layers.Labels
+        A binary mask to limit the watershed segmentation.
+    watershed_lines : bool, optional
+        Whether to include watershed lines in the output, by default False.
+    invert_image : bool, optional
+        Whether to invert the image before watershed, typically used when segmenting from a distance transform, by default False.
+
+    """
     sign = -1 if invert_image else 1
     return (
         skimage.segmentation.watershed(
