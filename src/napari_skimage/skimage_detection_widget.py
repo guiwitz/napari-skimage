@@ -13,30 +13,14 @@ if TYPE_CHECKING:
     import napari
 
 
-def _on_init_peak_local_max(widget):
-    label_widget = Label(value='')
-    func_name = '_'.join(widget.label.split(' ')[:-1])
-    label_widget.value = f'<a href=\"https://scikit-image.org/docs/stable/api/skimage.feature.html#skimage.feature.{func_name}\">skimage.feature.{func_name}</a>'
-    label_widget.native.setTextFormat(Qt.RichText)
-    label_widget.native.setTextInteractionFlags(Qt.TextBrowserInteraction)
-    label_widget.native.setOpenExternalLinks(True)
-    widget.extend([label_widget])
-
-
-def _on_init_marching_cubes(widget):
-    label_widget = Label(value='')
-    label_widget.value = '<a href=\"https://scikit-image.org/docs/stable/api/skimage.measure.html#skimage.measure.marching_cubes\">skimage.measure.marching_cubes</a>'
-    label_widget.native.setTextFormat(Qt.RichText)
-    label_widget.native.setTextInteractionFlags(Qt.TextBrowserInteraction)
-    label_widget.native.setOpenExternalLinks(True)
-    widget.extend([label_widget])
-
 def _on_init(widget):
     label_widget = Label(value='')
     if widget.label == 'watershed widget':
         label_widget.value = f'<a href=\"https://scikit-image.org/docs/0.25.x/api/skimage.segmentation.html#skimage.segmentation.watershed\">skimage.segmentation.watershed</a>'
     elif widget.label == 'marching cubes widget' or widget.label == 'marching cubes labels widget':
         label_widget.value = f'<a href=\"https://scikit-image.org/docs/stable/api/skimage.measure.html#skimage.measure.marching_cubes\">skimage.measure.marching_cubes</a>'
+    elif widget.label == 'peak local max widget':
+        label_widget.value = f'<a href=\"https://scikit-image.org/docs/stable/api/skimage.feature.html#skimage.feature.peak_local_max\">skimage.feature.peak_local_max</a>'
     label_widget.native.setTextFormat(Qt.RichText)
     label_widget.native.setTextInteractionFlags(Qt.TextBrowserInteraction)
     label_widget.native.setOpenExternalLinks(True)
@@ -49,7 +33,7 @@ def _on_init(widget):
     threshold_absolute={'label': 'Threshold Absolute', 'min': 0.0, 'max': 65535},
     threshold_relative={'label': 'Threshold Relative', 'min': 0.0, 'max': 1.0},
     call_button="Detect Local Maxima",
-    widget_init=_on_init_peak_local_max
+    widget_init=_on_init
 )
 def peak_local_max_widget(
     image_layer: Image,
@@ -74,7 +58,7 @@ def peak_local_max_widget(
     image_layer={'label': 'Image'},
     level={'label': 'Level', 'min': 0.0, 'max': 65535},
     call_button="Apply Marching Cubes",
-    widget_init=_on_init_marching_cubes
+    widget_init=_on_init
 )
 def marching_cubes_widget(
     image_layer: Image,
@@ -92,7 +76,7 @@ def marching_cubes_widget(
 @magic_factory(
     labels_layer={'label': 'Labels'},
     call_button='Apply Marching Cubes',
-    widget_init=_on_init_marching_cubes
+    widget_init=_on_init
 )
 def marching_cubes_labels_widget(
     labels_layer: Labels,
@@ -107,7 +91,9 @@ def marching_cubes_labels_widget(
 
 @magic_factory(
         image_layer={'label': 'Image'},
-        label_layer={'label': 'Label'},
+        label_layer={'label': 'Markers'},
+        mask_layer={'label': 'Mask'},
+        watershed_lines={'label': 'Watershed Lines'},
         invert_image={'label': 'Invert Image'},
         call_button="Apply Watershed",
         widget_init=_on_init
@@ -116,10 +102,13 @@ def watershed_widget(
     image_layer: Image,
     label_layer: Labels,
     mask_layer: Labels,
+    watershed_lines: bool = False,
     invert_image: bool = False
 ) -> napari.types.LayerDataTuple:
     sign = -1 if invert_image else 1
     return (
-        skimage.segmentation.watershed(sign * image_layer.data, markers=label_layer.data, mask=mask_layer.data),
+        skimage.segmentation.watershed(
+            image = sign * image_layer.data, markers=label_layer.data,
+            mask=mask_layer.data, watershed_line=watershed_lines),
         {'name': f'{label_layer.name}_watershed'},
         'image')
