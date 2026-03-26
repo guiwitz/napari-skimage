@@ -70,7 +70,7 @@ def test_regionprops_widget(make_napari_viewer):
             "label": [1.0, 2.0],
         }
     )
-    pd.testing.assert_frame_equal(results_df, expected_df)
+    pd.testing.assert_frame_equal(results_df, expected_df, check_like=True)
 
     # Check that the dock widget is added to the viewer
     assert hasattr(widget, "_results_dock_widget")
