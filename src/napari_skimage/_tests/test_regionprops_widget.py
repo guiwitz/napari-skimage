@@ -239,3 +239,81 @@ def test_analyze_button_state(make_napari_viewer):
     widget.image_layer.value = None
     assert widget.image_layer.value == None
     assert widget.call_button.enabled
+
+def test_per_slice_properties(make_napari_viewer):
+    # Create a napari viewer
+    viewer = make_napari_viewer()
+
+    # Test 3D data with per-slice properties
+    intensity_image = np.array(
+        [
+            [[0, 0, 0], [0, 6, 0], [0, 0, 0]],
+            [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
+            [[0, 1, 0], [0, 7, 0], [0, 0, 0]],
+        ]
+    )
+    labels_image = np.array(
+        [
+            [[0, 0, 0], [0, 1, 0], [0, 0, 0]],
+            [[0, 3, 0], [0, 2, 0], [0, 0, 0]],
+            [[0, 3, 0], [0, 4, 0], [0, 5, 0]],
+        ]
+    )
+
+    # Add the test data to the viewer
+    intensity_layer = viewer.add_image(intensity_image, name="Intensity Image")
+    labels_layer = viewer.add_labels(labels_image, name="Labels Layer")
+
+    # Create the regionprops widget
+    widget = regionprops_widget()
+
+    # Call the widget with the test layers
+    widget.labels_layer.value = labels_layer
+    widget.image_layer.value = intensity_layer
+
+    # Select properties to compute
+    widget.properties.value = ["area", "label", "intensity_mean"]
+
+    # activate per-slice
+    widget.per_slice.value = True
+
+    # Call the widget with the test layers
+    widget(
+        image_layer=intensity_layer,
+        labels_layer=labels_layer,
+        properties=widget.properties.value,
+    )
+    
+    # Check the contents of the results table
+    results_df = widget.results_table.to_dataframe()
+    expected_df = pd.DataFrame(
+        {
+            "area": [1.0] * 6,
+            "label": [1.0, 2.0, 3.0, 3.0, 4.0, 5.0],
+            "intensity_mean": [6.0] + [0.0] + [0.0] + [1.0] + [7.0] + [0.0],
+            "frame": [0.0, 1.0, 1.0, 2.0, 2.0, 2.0],
+        }
+    )
+    pd.testing.assert_frame_equal(results_df, expected_df, check_like=True)
+
+    # without slicing the two 3 labels should be a single object
+    # activate per-slice
+    widget.per_slice.value = False
+
+    # Call the widget with the test layers
+    widget(
+        image_layer=intensity_layer,
+        labels_layer=labels_layer,
+        properties=widget.properties.value,
+    )
+    
+    # Check the contents of the results table
+    results_df = widget.results_table.to_dataframe()
+    expected_df = pd.DataFrame(
+        {
+            "area": [1.0] * 2 + [2.0] + [1.0] * 2,
+            "label": [1.0, 2.0, 3.0, 4.0, 5.0],
+            "intensity_mean": [6.0] + [0.0] + [0.5] + [7.0] + [0.0],
+        }
+    )
+    pd.testing.assert_frame_equal(results_df, expected_df, check_like=True)
