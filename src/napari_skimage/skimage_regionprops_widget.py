@@ -104,13 +104,13 @@ def _on_init(widget: "Widget") -> None:
                 widget.slice_axis.value = 0
 
     def clicked_table(event: object):
+        # only works if the 'label' column is present in the results table
         row = widget.results_table.native.currentRow()
         if "label" in widget.results_table.column_headers:
             label = int(widget.results_table["label"][row])
         else:
-            # If the label column is not present, use the row index
-            # plus one to account for zero-based indexing
-            label = np.unique(widget.labels_layer.value.data)[row + 1]
+            show_info("No 'label' column found in results table. Please select labels in the properties.")
+            return
         show_info(f"Table clicked, set label: {label}")
         widget.labels_layer.value.selected_label = label
 
