@@ -78,12 +78,22 @@ def _on_init(widget: "Widget") -> None:
         image_layer = widget.image_layer.value
 
         if labels_layer and image_layer:
-            shapes_match = labels_layer.data.shape == image_layer.data.shape
-            if not shapes_match:
+            # shapes_match = labels_layer.data.shape == image_layer.data.shape
+            shape_labels = labels_layer.data.shape
+            shape_image = image_layer.data.shape
+            # elaborate on test to enable the button in more cases
+            if shape_labels == shape_image:
+                pass
+            elif ((len(shape_labels) == len(shape_image)-1) and 
+                ( shape_labels == shape_image[1:] 
+                    or shape_labels == shape_image[:-1] )) :
+                pass
+            else:
+            # if not shapes_match:
                 show_warning(
                     "Shape mismatch: Labels Layer and Intensity Image must have the same shape."
                 )
-            widget.call_button.enabled = shapes_match
+            widget.call_button.enabled = True
         elif labels_layer:
             widget.call_button.enabled = True
         else:
@@ -182,13 +192,6 @@ def regionprops_widget(
 ) -> napari.types.LayerDataTuple:
     """Widget to compute regionprops_table and display results."""
 
-    # if both image and labels layers are provided, they need to match shape
-    if image_layer and labels_layer and labels_layer.data.shape != image_layer.data.shape:
-        show_warning(
-            "Labels Layer and Intensity Image must have the same shape."
-        )
-        return
-
     # Check for an image layer. If it's absent,
     if image_layer:
         image_layer_data = image_layer.data
@@ -209,18 +212,43 @@ def regionprops_widget(
         do_per_slice = False
         axis = 0
 
-    if do_per_slice and labels_layer.data.ndim >= 3:
-        n_slices = labels_layer.data.shape[axis]
+    # if both image and labels layers are provided, they need to match shape    
+    if image_layer and labels_layer:
+        shape_labels = labels_layer.data.shape
+        shape_image = image_layer.data.shape
+        # elaborate on test to enable the button in more cases
+        if shape_labels == shape_image:
+            pass
+        elif len(shape_labels) == len(shape_image) -1:
+            pass
+    else:
+    # if image_layer and labels_layer and labels_layer.data.shape != image_layer.data.shape:
+        show_warning(
+            "Labels Layer and Intensity Image must have the same shape."
+        )
+        return
+
+    if do_per_slice:
+        if (labels_layer.data.ndim <3 or 
+          (image_layer and (labels_layer.data.ndim == image_layer_data.ndim -1) 
+           and (labels_layer.data.shape == image_layer_data.shape[1:]) )) :
+            # make a virtual array to the same effect as np.tile
+            labels_layer_data = np.broadcast_to(labels_layer.data, image_layer_data.shape)
+            #case where shape_labels==shape_image[:-1]  handled by regionprops
+        else:
+            labels_layer_data = labels_layer.data
+        # and labels_layer.data.ndim >= 3:
+        n_slices = labels_layer_data.shape[axis]
         dfs = []
         for i in range(n_slices):
-            labels_slice = np.take(labels_layer.data, i, axis=axis)
+            labels_slice = np.take(labels_layer_data, i, axis=axis)
             if image_layer_data is not None:
                 intensity_slice = np.take(image_layer_data, i, axis=axis)
             else:
                 intensity_slice = None
 
             # Derive 2D spacing per slice when possible
-            if spacing is not None and len(spacing) == labels_layer.data.ndim:
+            if spacing is not None and len(spacing) == labels_layer_data.ndim:
                 spacing_slice = tuple(
                     spacing[j] for j in range(len(spacing)) if j != axis
                 )
