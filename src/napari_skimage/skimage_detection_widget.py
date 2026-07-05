@@ -128,4 +128,4 @@ def watershed_widget(
             image = sign * image_layer.data, markers=label_layer.data,
             mask=mask_layer.data, watershed_line=watershed_lines),
         {'name': f'{label_layer.name}_watershed'},
-        'image')
+        'labels')
