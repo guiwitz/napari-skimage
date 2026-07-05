@@ -27,6 +27,9 @@ contributions:
     - id: napari-skimage.make_butterworth_widget
       python_name: napari_skimage.skimage_filter_widget:butterworth_filter_widget
       title: Make Butterworth filter widget
+    - id: napari-skimage.make_distance_transform_widget
+      python_name: napari_skimage.skimage_filter_widget:distance_transform_widget
+      title: Make distance transform widget
     - id: napari-skimage.make_threshold_widget
       python_name: napari_skimage.skimage_threshold_widget:threshold_widget
       title: Make threshold widget
