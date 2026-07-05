@@ -106,7 +106,7 @@ def watershed_widget(
     invert_image: bool = False
 ) -> napari.types.LayerDataTuple:
     
-    """We can use numpy docstrings to provide tooltips.
+    """Segment an image, typically a distance transform, using the watershed algorithm.
 
     Parameters
     ----------
