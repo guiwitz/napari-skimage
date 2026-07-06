@@ -27,6 +27,9 @@ contributions:
     - id: napari-skimage.make_butterworth_widget
       python_name: napari_skimage.skimage_filter_widget:butterworth_filter_widget
       title: Make Butterworth filter widget
+    - id: napari-skimage.make_distance_transform_widget
+      python_name: napari_skimage.skimage_filter_widget:distance_transform_widget
+      title: Make distance transform widget
     - id: napari-skimage.make_threshold_widget
       python_name: napari_skimage.skimage_threshold_widget:threshold_widget
       title: Make threshold widget
@@ -42,6 +45,9 @@ contributions:
     - id: napari-skimage.make_label_widget
       python_name: napari_skimage.skimage_label_widget:label_widget
       title: Make label connected components widget
+    - id: napari-skimage.make_points_to_label_widget
+      python_name: napari_skimage.skimage_label_widget:points_to_label_widget
+      title: Make convert points to labels widget
     - id: napari-skimage.make_maths_image_pairs_widget
       python_name: napari_skimage.mathsops:maths_image_pairs_widget
       title: Make image pairs maths widget
@@ -72,6 +78,9 @@ contributions:
     - id: napari-skimage.make_marching_cubes_labels_widget
       python_name: napari_skimage.skimage_detection_widget:marching_cubes_labels_widget
       title: Make Marching Cubes (labels) widget
+    - id: napari-skimage.make_watershed_widget
+      python_name: napari_skimage.skimage_detection_widget:watershed_widget
+      title: Make Watershed widget
     - id: napari-skimage.make_regionprops_widget
       python_name: napari_skimage.skimage_regionprops_widget:regionprops_widget
       title: Make regionprops widget
@@ -95,6 +104,8 @@ contributions:
       display_name: Butterworth filter
     - command: napari-skimage.make_threshold_widget
       display_name: Automated Threshold
+    - command: napari-skimage.make_distance_transform_widget
+      display_name: Distance Transform
     - command: napari-skimage.make_manual_threshold_widget
       display_name: Manual Threshold
     - command: napari-skimage.make_binary_morphology_widget
@@ -103,6 +114,8 @@ contributions:
       display_name: Morphology
     - command: napari-skimage.make_label_widget
       display_name: Label connected components
+    - command: napari-skimage.make_points_to_label_widget
+      display_name: Convert Points to Labels
     - command: napari-skimage.make_simple_maths_widget
       display_name: Simple maths
     - command: napari-skimage.make_maths_crop_widget
@@ -123,6 +136,8 @@ contributions:
       display_name: Marching Cubes
     - command: napari-skimage.make_marching_cubes_labels_widget
       display_name: Marching Cubes (labels)
+    - command: napari-skimage.make_watershed_widget
+      display_name: Watershed
     - command: napari-skimage.make_regionprops_widget
       display_name: Regionprops (labels)
     - command: napari-skimage.make_axis_widget
@@ -143,14 +158,17 @@ contributions:
       - command: napari-skimage.make_regionprops_widget
     napari/layers/segment:
       - command: napari-skimage.make_label_widget
+      - command: napari-skimage.make_watershed_widget
     napari/layers/layer_type:
       - command: napari-skimage.make_peak_local_max_widget
       - command: napari-skimage.make_marching_cubes_widget
       - command: napari-skimage.make_marching_cubes_labels_widget
+      - command: napari-skimage.make_points_to_label_widget
     filtering_submenu:
       - command: napari-skimage.make_gaussian_widget
       - command: napari-skimage.make_median_widget
       - command: napari-skimage.make_butterworth_widget
+      - command: napari-skimage.make_distance_transform_widget
       - command: napari-skimage.make_rank_widget
     edge_subemnu:
       - command: napari-skimage.make_farid_widget

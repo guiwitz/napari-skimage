@@ -4,9 +4,11 @@ import numpy as np
 from magicgui import magic_factory
 from magicgui.widgets import Button, Container, create_widget, Label
 from qtpy.QtCore import Qt
+import scipy
+import scipy.ndimage
 import skimage.filters as sf
 import skimage.morphology as sm
-from napari.layers import Image
+from napari.layers import Image, Layer
 import napari.types
 
 
@@ -23,7 +25,10 @@ RankFilterWidget is a class that defines a widget for rank filters. The widget c
 def _on_init(widget):
     label_widget = Label(value='')
     func_name = widget.label.split(' ')[0]
-    label_widget.value = f'<a href=\"https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.{func_name}\">skimage.filters.{func_name}</a>'
+    if widget.label == 'distance transform widget':
+        label_widget.value = f'<a href=\"https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.distance_transform_edt.html\">scipy.ndimage.distance_transform_edt</a>'
+    else:
+        label_widget.value = f'<a href=\"https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.{func_name}\">skimage.filters.{func_name}</a>'
     label_widget.native.setTextFormat(Qt.RichText)
     label_widget.native.setTextInteractionFlags(Qt.TextBrowserInteraction)
     label_widget.native.setOpenExternalLinks(True)
@@ -147,6 +152,20 @@ def butterworth_filter_widget(
     return (
         img_filtered,
         {'name': f'{img_layer.name}_butterworth'},
+        'image')
+
+@magic_factory(
+        layer={'label': 'Labels or Image'},
+        call_button="Apply Distance Transform",
+        widget_init=_on_init
+)
+def distance_transform_widget(
+    layer: Layer,
+    sampling: float = 1.0,
+) -> napari.types.LayerDataTuple:
+    return (
+        scipy.ndimage.distance_transform_edt(layer.data, sampling=sampling),
+        {'name': f'{layer.name}_distance_transform'},
         'image')
 
 class RankFilterWidget(Container):
