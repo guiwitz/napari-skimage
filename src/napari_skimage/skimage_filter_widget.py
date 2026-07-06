@@ -34,6 +34,23 @@ def _on_init(widget):
     label_widget.native.setOpenExternalLinks(True)
     widget.extend([label_widget])
 
+def _on_init_median(widget):
+    _on_init(widget)
+    def update_properties_choices(event: object) -> None:
+        if widget.img_layer.value is None:
+            widget.footprint._default_choices = []
+        elif widget.img_layer.value.data.ndim == 2:
+            widget.footprint._default_choices = ['disk', 'square', 'diamond', 'star', 'octagon']
+        elif widget.img_layer.value.data.ndim == 3:
+            widget.footprint._default_choices = ['ball']
+        else:
+            widget.footprint._default_choices = []
+        widget.footprint.reset_choices()
+
+    widget.img_layer.changed.connect(update_properties_choices)
+    update_properties_choices(widget)
+    
+
 @magic_factory(
         image_layer={'label': 'Image'},
         mode={'choices': ['reflect', 'constant', 'nearest', 'mirror', 'wrap']},
@@ -116,7 +133,7 @@ def frangi_filter_widget(
     footprint={'label': 'Footprint', 'choices': ['disk', 'square', 'diamond', 'star', 'octagon']},
     footprint_size={'label': 'Footprint size', 'max': 100, 'min': 1, 'step': 1},
     call_button="Apply operation",
-    widget_init=_on_init
+    widget_init=_on_init_median
 )
 def median_filter_widget(
     img_layer: Image,
