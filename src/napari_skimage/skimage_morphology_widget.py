@@ -108,3 +108,21 @@ def morphology_widget(
         mask,
         {'name': f'{label_layer.name}_{method}'},
         'image')
+
+@magic_factory(
+    label_layer={'label': 'Labels'},
+    max_size={'label': 'max_size', 'max': 100, 'min': 1, 'step': 1},
+    connectivity={'label': 'connectivity', 'max': 3, 'min': 1, 'step': 1},
+    call_button="Apply operation",
+    widget_init=_on_init
+)
+def remove_small_objects_widget(
+    label_layer: Labels,
+    max_size = 64,
+    connectivity = 1,
+) -> napari.types.LayerDataTuple:
+    mask = sm.remove_small_objects(label_layer.data, max_size=max_size, connectivity=connectivity)
+    return (
+        mask,
+        {'name': f'{label_layer.name}_remove_small_objects'},
+        'labels')

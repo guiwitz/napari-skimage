@@ -8,7 +8,8 @@ from .skimage_filter_widget import (farid_filter_widget, prewitt_filter_widget,
                                     frangi_filter_widget, median_filter_widget,
                                     butterworth_filter_widget, RankFilterWidget)
 from .skimage_threshold_widget import threshold_widget, ManualThresholdWidget
-from .skimage_morphology_widget import (binary_morphology_widget, morphology_widget)
+from .skimage_morphology_widget import (binary_morphology_widget, morphology_widget,
+                                         remove_small_objects_widget)
 from .skimage_restoration_widget import (rolling_ball_restoration_widget,
                                          denoise_nl_means_restoration_widget)
 from. mathsops import (simple_maths_widget, maths_image_pairs_widget,
@@ -34,6 +35,7 @@ __all__ = (
     "ManualThresholdWidget",
     "binary_morphology_widget",
     "morphology_widget",
+    "remove_small_objects_widget",
     "rolling_ball_restoration_widget",
     "denoise_nl_means_restoration_widget",
     "simple_maths_widget",

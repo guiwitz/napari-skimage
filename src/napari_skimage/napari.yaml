@@ -45,6 +45,9 @@ contributions:
     - id: napari-skimage.make_label_widget
       python_name: napari_skimage.skimage_label_widget:label_widget
       title: Make label connected components widget
+    - id: napari-skimage.make_remove_small_objects_widget
+      python_name: napari_skimage.skimage_morphology_widget:remove_small_objects_widget
+      title: Make remove small objects widget
     - id: napari-skimage.make_points_to_label_widget
       python_name: napari_skimage.skimage_label_widget:points_to_label_widget
       title: Make convert points to labels widget
@@ -112,6 +115,8 @@ contributions:
       display_name: Binary Morphology
     - command: napari-skimage.make_morphology_widget
       display_name: Morphology
+    - command: napari-skimage.make_remove_small_objects_widget
+      display_name: Remove small objects
     - command: napari-skimage.make_label_widget
       display_name: Label connected components
     - command: napari-skimage.make_points_to_label_widget
@@ -146,7 +151,7 @@ contributions:
   menus:
     napari/layers/filter:
       - submenu: filtering_submenu
-      - submenu: edge_subemnu
+      - submenu: edge_submenu
       - submenu: ridge_submenu
       - submenu: denoising_submenu
       - submenu: thresholding_submenu
@@ -170,7 +175,7 @@ contributions:
       - command: napari-skimage.make_butterworth_widget
       - command: napari-skimage.make_distance_transform_widget
       - command: napari-skimage.make_rank_widget
-    edge_subemnu:
+    edge_submenu:
       - command: napari-skimage.make_farid_widget
       - command: napari-skimage.make_prewitt_widget
       - command: napari-skimage.make_laplace_widget
@@ -185,6 +190,7 @@ contributions:
     morphology_submenu:
       - command: napari-skimage.make_binary_morphology_widget
       - command: napari-skimage.make_morphology_widget
+      - command: napari-skimage.make_remove_small_objects_widget
     maths_submenu:
       - command: napari-skimage.make_simple_maths_widget
       - command: napari-skimage.make_maths_image_pairs_widget
@@ -193,7 +199,7 @@ contributions:
   submenus:
     - id: filtering_submenu
       label: Filtering
-    - id: edge_subemnu
+    - id: edge_submenu
       label: Edge detection
     - id: ridge_submenu
       label: Ridge detection
