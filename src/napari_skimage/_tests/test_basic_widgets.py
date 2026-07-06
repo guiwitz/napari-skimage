@@ -3,7 +3,8 @@ import numpy as np
 
 from napari_skimage.skimage_morphology_widget import (
     binary_morphology_widget,
-    morphology_widget
+    morphology_widget,
+    remove_small_objects_widget,
 )
 from napari_skimage.skimage_threshold_widget import threshold_widget, ManualThresholdWidget
 import napari_skimage.skimage_filter_widget as sfw
@@ -86,6 +87,29 @@ def test_morphology_widget(make_napari_viewer):
 
         filtered, _, _ = my_widget(viewer.layers[0])
         assert filtered.data.shape == random_image.shape
+
+
+def test_remove_small_objects_widget(make_napari_viewer):
+    viewer = make_napari_viewer()
+    labels = np.array(
+        [
+            [0, 0, 0, 0, 0],
+            [0, 1, 0, 2, 2],
+            [0, 0, 0, 2, 2],
+            [0, 0, 0, 0, 0],
+        ],
+        dtype=np.uint8,
+    )
+    layer = viewer.add_labels(labels, name='labels')
+
+    my_widget = remove_small_objects_widget()
+    filtered, metadata, layer_type = my_widget(layer, max_size=2, connectivity=1)
+
+    # Small single-pixel label is removed, larger 2x2 label is preserved.
+    assert filtered[1, 1] == 0
+    assert np.all(filtered[1:3, 3:5] == 2)
+    assert metadata['name'] == 'labels_remove_small_objects'
+    assert layer_type == 'labels'
 
 def test_thresholding_widget(make_napari_viewer):
     viewer = make_napari_viewer()

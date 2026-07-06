@@ -108,3 +108,48 @@ def morphology_widget(
         mask,
         {'name': f'{label_layer.name}_{method}'},
         'image')
+
+
+def _on_init2(widget):
+    label_widget = Label(value='')
+    func_name = widget.label.split(' ')[0]
+    label_widget.value = f'<a href=\"https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.{func_name}\">skimage.morphology.{func_name}</a>'
+    label_widget.native.setTextFormat(Qt.RichText)
+    label_widget.native.setTextInteractionFlags(Qt.TextBrowserInteraction)
+    label_widget.native.setOpenExternalLinks(True)
+    widget.extend([label_widget])
+
+@magic_factory(
+    label_layer={'label': 'Labels'},
+    max_size={'label': 'max_size', 'value': 64, 'min': 0, 'max': 2_147_483_647},
+    connectivity={'label': 'connectivity', 'max': 3, 'min': 1, 'step': 1},
+    call_button="Apply operation",
+    widget_init=_on_init2
+)
+def remove_small_objects_widget(
+    label_layer: Labels,
+    max_size = 64,
+    connectivity = 1,
+) -> napari.types.LayerDataTuple:
+    """Remove small objects from a labeled image.
+
+    Parameters
+    ----------
+    label_layer : napari.layers.Labels
+        The labeled image from which to remove small objects.
+    max_size : int, optional
+        The maximum size of objects to keep, by default 64.
+    connectivity : int, optional
+        The connectivity defining the neighborhood of a pixel, by default 1.
+
+    Returns
+    -------
+    napari.types.LayerDataTuple
+        The labeled image with small objects removed.
+    """
+    
+    mask = sm.remove_small_objects(label_layer.data, max_size=max_size, connectivity=connectivity)
+    return (
+        mask,
+        {'name': f'{label_layer.name}_remove_small_objects'},
+        'labels')

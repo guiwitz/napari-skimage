@@ -17,8 +17,6 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
@@ -71,7 +69,7 @@ write_to = "src/napari_skimage/_version.py"
 
 [tool.black]
 line-length = 79
-target-version = ['py39', 'py310', 'py311', 'py312', 'py313', 'py314']
+target-version = ['py311', 'py312', 'py313', 'py314']
 
 [tool.ruff]
 line-length = 79
@@ -116,5 +114,5 @@ exclude = [
     "*_vendor*",
 ]
 
-target-version = "py39"
+target-version = "py311"
 fix = true
