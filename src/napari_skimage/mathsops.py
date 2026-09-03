@@ -30,6 +30,7 @@ def simple_maths_widget(
          'scale': image_layer.scale,
          'translate': image_layer.translate,
          'rotate': image_layer.rotate,
+         'affine': image_layer.affine,
         },
         'image')
 
@@ -60,6 +61,7 @@ def maths_image_pairs_widget(
          'scale': data_layer.scale,
          'translate': data_layer.translate,
          'rotate': data_layer.rotate,
+         'affine': data_layer.affine,
         },
         'image')
 
@@ -85,6 +87,7 @@ def conversion_widget(
          'scale': image_layer.scale,
          'translate': image_layer.translate,
          'rotate': image_layer.rotate,
+         'affine': image_layer.affine,
         },
         'image')
 

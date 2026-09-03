@@ -74,6 +74,7 @@ def label_widget(
          'scale': labels_layer.scale,
          'translate': labels_layer.translate,
          'rotate': labels_layer.rotate,
+         'affine': labels_layer.affine,
         },
         "labels",
     )
@@ -95,6 +96,7 @@ def points_to_label_widget(
          'scale': image_layer.scale,
          'translate': image_layer.translate,
          'rotate': image_layer.rotate,
+         'affine': image_layer.affine,
         },
         "labels",
     )

@@ -53,6 +53,7 @@ def peak_local_max_widget(
          'scale': image_layer.scale,
          'translate': image_layer.translate,
          'rotate': image_layer.rotate,
+         'affine': image_layer.affine,
         },
         'points'
     )
@@ -76,6 +77,7 @@ def marching_cubes_widget(
          'scale': image_layer.scale,
          'translate': image_layer.translate,
          'rotate': image_layer.rotate,
+         'affine': image_layer.affine,
         },
         'surface'
     )
@@ -97,6 +99,7 @@ def marching_cubes_labels_widget(
          'scale': labels_layer.scale,
          'translate': labels_layer.translate,
          'rotate': labels_layer.rotate,
+         'affine': labels_layer.affine,
         },
         'surface'
     )
@@ -143,5 +146,6 @@ def watershed_widget(
          'scale': label_layer.scale,
          'translate': label_layer.translate,
          'rotate': label_layer.rotate,
+         'affine': label_layer.affine,
         },
         'labels')

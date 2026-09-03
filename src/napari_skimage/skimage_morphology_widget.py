@@ -73,6 +73,7 @@ def binary_morphology_widget(
          'scale': label_layer.scale,
          'translate': label_layer.translate,
          'rotate': label_layer.rotate,
+         'affine': label_layer.affine,
         },
         'labels')
 
@@ -114,6 +115,7 @@ def morphology_widget(
          'scale': label_layer.scale,
          'translate': label_layer.translate,
          'rotate': label_layer.rotate,
+         'affine': label_layer.affine,
         },
         'image')
 
@@ -163,5 +165,6 @@ def remove_small_objects_widget(
          'scale': label_layer.scale,
          'translate': label_layer.translate,
          'rotate': label_layer.rotate,
+         'affine': label_layer.affine,
         },
         'labels')

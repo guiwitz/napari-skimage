@@ -65,6 +65,7 @@ def farid_filter_widget(
          'scale': image_layer.scale,
          'translate': image_layer.translate,
          'rotate': image_layer.rotate,
+         'affine': image_layer.affine,
         },
         'image')
 
@@ -82,6 +83,7 @@ def prewitt_filter_widget(
          'scale': image_layer.scale,
          'translate': image_layer.translate,
          'rotate': image_layer.rotate,
+         'affine': image_layer.affine,
         },
         'image')
 
@@ -99,6 +101,7 @@ def laplace_filter_widget(
          'scale': image_layer.scale,
          'translate': image_layer.translate,
          'rotate': image_layer.rotate,
+         'affine': image_layer.affine,
         },
         'image')
 
@@ -120,6 +123,7 @@ def gaussian_filter_widget(
          'scale': img_layer.scale,
          'translate': img_layer.translate,
          'rotate': img_layer.rotate,
+         'affine': img_layer.affine,
          },
         'image')
 
@@ -144,6 +148,7 @@ def frangi_filter_widget(
          'scale': img_layer.scale,
          'translate': img_layer.translate,
          'rotate': img_layer.rotate,
+         'affine': img_layer.affine,
         },
         'image')
 
@@ -170,6 +175,7 @@ def median_filter_widget(
          'scale': img_layer.scale,
          'translate': img_layer.translate,
          'rotate': img_layer.rotate,
+         'affine': img_layer.affine,
         },
         'image')
 
@@ -196,6 +202,7 @@ def butterworth_filter_widget(
          'scale': img_layer.scale,
          'translate': img_layer.translate,
          'rotate': img_layer.rotate,
+         'affine': img_layer.affine,
         },
         'image')
 
@@ -214,6 +221,7 @@ def distance_transform_widget(
          'scale': layer.scale,
          'translate': layer.translate,
          'rotate': layer.rotate,
+         'affine': layer.affine,
         },
         'image')
 

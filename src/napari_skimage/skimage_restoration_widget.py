@@ -43,6 +43,7 @@ def rolling_ball_restoration_widget(
          'scale': image_layer.scale,
          'translate': image_layer.translate,
          'rotate': image_layer.rotate,
+         'affine': image_layer.affine,
          },
         'image')
 
@@ -66,5 +67,6 @@ def denoise_nl_means_restoration_widget(
          'scale': image_layer.scale,
          'translate': image_layer.translate,
          'rotate': image_layer.rotate,
+         'affine': image_layer.affine,
          },
         'image')
