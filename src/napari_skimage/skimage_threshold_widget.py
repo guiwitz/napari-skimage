@@ -44,7 +44,11 @@ def threshold_widget(
     mask = img_layer.data > th
     return (
         mask,
-        {'name': f'{img_layer.name}_threshold_{method}'},
+        {'name': f'{img_layer.name}_threshold_{method}',
+         'scale': img_layer.scale,
+         'translate': img_layer.translate,
+         'rotate': img_layer.rotate,
+        },
         'labels')
 
 
@@ -98,4 +102,7 @@ class ManualThresholdWidget(Container):
         self._viewer.add_labels(
             mask,
             name=f"{image_layer.name}_threshold_manual",
+            scale=image_layer.scale,
+            translate=image_layer.translate,
+            rotate=image_layer.rotate,
         )
