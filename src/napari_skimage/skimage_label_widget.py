@@ -70,7 +70,12 @@ def label_widget(
     show_info(f"Labeled {number} regions")
     return (
         (labeled_array,),
-        {"name": f"{labels_layer.name}_labeled"},
+        {"name": f"{labels_layer.name}_labeled",
+         'scale': labels_layer.scale,
+         'translate': labels_layer.translate,
+         'rotate': labels_layer.rotate,
+         'affine': labels_layer.affine,
+        },
         "labels",
     )
 
@@ -87,7 +92,12 @@ def points_to_label_widget(
     labeled_points = skimage.util.label_points(points_layer.data, image_layer.data.shape)
     return (
         (labeled_points,),
-        {"name": f"{points_layer.name}_labeled"},
+        {"name": f"{points_layer.name}_labeled",
+         'scale': image_layer.scale,
+         'translate': image_layer.translate,
+         'rotate': image_layer.rotate,
+         'affine': image_layer.affine,
+        },
         "labels",
     )
 

@@ -69,7 +69,12 @@ def binary_morphology_widget(
     mask = fun(label_layer.data, selem)#, mode=mode)
     return (
         mask,
-        {'name': f'{label_layer.name}_{method}'},
+        {'name': f'{label_layer.name}_{method}',
+         'scale': label_layer.scale,
+         'translate': label_layer.translate,
+         'rotate': label_layer.rotate,
+         'affine': label_layer.affine,
+        },
         'labels')
 
 @magic_factory(
@@ -106,7 +111,12 @@ def morphology_widget(
     mask = fun(label_layer.data, selem)#, mode=mode)
     return (
         mask,
-        {'name': f'{label_layer.name}_{method}'},
+        {'name': f'{label_layer.name}_{method}',
+         'scale': label_layer.scale,
+         'translate': label_layer.translate,
+         'rotate': label_layer.rotate,
+         'affine': label_layer.affine,
+        },
         'image')
 
 
@@ -151,5 +161,10 @@ def remove_small_objects_widget(
     mask = sm.remove_small_objects(label_layer.data, max_size=max_size, connectivity=connectivity)
     return (
         mask,
-        {'name': f'{label_layer.name}_remove_small_objects'},
+        {'name': f'{label_layer.name}_remove_small_objects',
+         'scale': label_layer.scale,
+         'translate': label_layer.translate,
+         'rotate': label_layer.rotate,
+         'affine': label_layer.affine,
+        },
         'labels')

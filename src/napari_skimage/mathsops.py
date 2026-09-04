@@ -26,7 +26,12 @@ def simple_maths_widget(
     out = fun(image_layer.data)
     return (
         out,
-        {'name': f'{image_layer.name}_{operation}'},
+        {'name': f'{image_layer.name}_{operation}',
+         'scale': image_layer.scale,
+         'translate': image_layer.translate,
+         'rotate': image_layer.rotate,
+         'affine': image_layer.affine,
+        },
         'image')
 
 @magic_factory(
@@ -52,7 +57,12 @@ def maths_image_pairs_widget(
         out = data_layer.data / data_layer2.data
     return (
         out,
-        {'name': f'Result_{operation}'},
+        {'name': f'Result_{operation}',
+         'scale': data_layer.scale,
+         'translate': data_layer.translate,
+         'rotate': data_layer.rotate,
+         'affine': data_layer.affine,
+        },
         'image')
 
 @magic_factory(
@@ -73,7 +83,12 @@ def conversion_widget(
         out = skimage.util.img_as_float64(image_layer.data)
     return (
         out,
-        {'name': f'{image_layer.name}_{mode}'},
+        {'name': f'{image_layer.name}_{mode}',
+         'scale': image_layer.scale,
+         'translate': image_layer.translate,
+         'rotate': image_layer.rotate,
+         'affine': image_layer.affine,
+        },
         'image')
 
 """

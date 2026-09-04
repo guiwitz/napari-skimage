@@ -39,7 +39,12 @@ def rolling_ball_restoration_widget(
     radius: int = 100) -> napari.types.LayerDataTuple:
     return (
         sr.rolling_ball(image_layer.data, radius=radius),
-        {'name': f'{image_layer.name}_rolling_ball'},
+        {'name': f'{image_layer.name}_rolling_ball',
+         'scale': image_layer.scale,
+         'translate': image_layer.translate,
+         'rotate': image_layer.rotate,
+         'affine': image_layer.affine,
+         },
         'image')
 
 @magic_factory(
@@ -58,5 +63,10 @@ def denoise_nl_means_restoration_widget(
         sr.denoise_nl_means(image_layer.data, patch_distance=patch_distance,
                         h=h, fast_mode=fast_mode, sigma=sigma,
                         preserve_range=preserve_range),
-        {'name': f'{image_layer.name}_denoise_nl_means'},
+        {'name': f'{image_layer.name}_denoise_nl_means',
+         'scale': image_layer.scale,
+         'translate': image_layer.translate,
+         'rotate': image_layer.rotate,
+         'affine': image_layer.affine,
+         },
         'image')

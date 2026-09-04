@@ -61,7 +61,12 @@ def farid_filter_widget(
     image_layer: Image, mode: str ='reflect') -> napari.types.LayerDataTuple:
     return (
         sf.farid(image_layer.data, mode=mode),
-        {'name': f'{image_layer.name}_farid'},
+        {'name': f'{image_layer.name}_farid',
+         'scale': image_layer.scale,
+         'translate': image_layer.translate,
+         'rotate': image_layer.rotate,
+         'affine': image_layer.affine,
+        },
         'image')
 
 @magic_factory(
@@ -74,7 +79,12 @@ def prewitt_filter_widget(
     image_layer: Image, mode: str ='reflect') -> napari.types.LayerDataTuple:
     return (
         sf.prewitt(image_layer.data, mode=mode),
-        {'name': f'{image_layer.name}_prewitt'},
+        {'name': f'{image_layer.name}_prewitt',
+         'scale': image_layer.scale,
+         'translate': image_layer.translate,
+         'rotate': image_layer.rotate,
+         'affine': image_layer.affine,
+        },
         'image')
 
 @magic_factory(
@@ -87,7 +97,12 @@ def laplace_filter_widget(
     ksize: int = 3.0) -> napari.types.LayerDataTuple:
     return (
         sf.laplace(image_layer.data, ksize=ksize),
-        {'name': f'{image_layer.name}_laplace'},
+        {'name': f'{image_layer.name}_laplace',
+         'scale': image_layer.scale,
+         'translate': image_layer.translate,
+         'rotate': image_layer.rotate,
+         'affine': image_layer.affine,
+        },
         'image')
 
 @magic_factory(
@@ -104,7 +119,12 @@ def gaussian_filter_widget(
 ) -> napari.types.LayerDataTuple:
     return (
         sf.gaussian(img_layer.data, sigma=sigma, preserve_range=preserve_range, mode=mode),
-        {'name': f'{img_layer.name}_gaussian_σ={sigma}'},
+        {'name': f'{img_layer.name}_gaussian_σ={sigma}',
+         'scale': img_layer.scale,
+         'translate': img_layer.translate,
+         'rotate': img_layer.rotate,
+         'affine': img_layer.affine,
+         },
         'image')
 
 @magic_factory(
@@ -124,7 +144,12 @@ def frangi_filter_widget(
     return (
         sf.frangi(img_layer.data, sigmas=np.arange(scale_start, scale_end, scale_step),
                   black_ridges=black_ridges, mode=mode),
-        {'name': f'{img_layer.name}_frangi'},
+        {'name': f'{img_layer.name}_frangi',
+         'scale': img_layer.scale,
+         'translate': img_layer.translate,
+         'rotate': img_layer.rotate,
+         'affine': img_layer.affine,
+        },
         'image')
 
 @magic_factory(
@@ -146,7 +171,12 @@ def median_filter_widget(
     img_filtered = sf.median(img_layer.data, footprint=selem, mode=mode)
     return (
         img_filtered,
-        {'name': f'{img_layer.name}_median'},
+        {'name': f'{img_layer.name}_median',
+         'scale': img_layer.scale,
+         'translate': img_layer.translate,
+         'rotate': img_layer.rotate,
+         'affine': img_layer.affine,
+        },
         'image')
 
 @magic_factory(
@@ -168,7 +198,12 @@ def butterworth_filter_widget(
         npad=npad)
     return (
         img_filtered,
-        {'name': f'{img_layer.name}_butterworth'},
+        {'name': f'{img_layer.name}_butterworth',
+         'scale': img_layer.scale,
+         'translate': img_layer.translate,
+         'rotate': img_layer.rotate,
+         'affine': img_layer.affine,
+        },
         'image')
 
 @magic_factory(
@@ -182,7 +217,12 @@ def distance_transform_widget(
 ) -> napari.types.LayerDataTuple:
     return (
         scipy.ndimage.distance_transform_edt(layer.data, sampling=sampling),
-        {'name': f'{layer.name}_distance_transform'},
+        {'name': f'{layer.name}_distance_transform',
+         'scale': layer.scale,
+         'translate': layer.translate,
+         'rotate': layer.rotate,
+         'affine': layer.affine,
+        },
         'image')
 
 class RankFilterWidget(Container):
@@ -269,5 +309,8 @@ class RankFilterWidget(Container):
         self._viewer.add_image(
             img_filtered,
             name=f"{image_layer.name}_{self.stat.value}",
+            scale=image_layer.scale,
+            translate=image_layer.translate,
+            rotate=image_layer.rotate,
             colormap="gray",
         )

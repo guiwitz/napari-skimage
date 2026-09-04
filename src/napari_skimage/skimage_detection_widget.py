@@ -49,7 +49,12 @@ def peak_local_max_widget(
                                  exclude_border=exclude_border)
     return (
         coordinates,
-        {'name': f'{image_layer.name}_local_maxima'},
+        {'name': f'{image_layer.name}_local_maxima',
+         'scale': image_layer.scale,
+         'translate': image_layer.translate,
+         'rotate': image_layer.rotate,
+         'affine': image_layer.affine,
+        },
         'points'
     )
 
@@ -68,7 +73,12 @@ def marching_cubes_widget(
     verts, faces, _, _ = marching_cubes(image_layer.data, level=level, spacing=image_layer.scale)
     return (
         (verts, faces.astype(int)),
-        {'name': f'{image_layer.name}_surface'},
+        {'name': f'{image_layer.name}_surface',
+         'scale': image_layer.scale,
+         'translate': image_layer.translate,
+         'rotate': image_layer.rotate,
+         'affine': image_layer.affine,
+        },
         'surface'
     )
 
@@ -85,7 +95,12 @@ def marching_cubes_labels_widget(
     verts, faces, _, _ = marching_cubes(labels_layer.data > 0, level=0.5)
     return (
         (verts, faces.astype(int)),
-        {'name': f'{labels_layer.name}_surface'},
+        {'name': f'{labels_layer.name}_surface',
+         'scale': labels_layer.scale,
+         'translate': labels_layer.translate,
+         'rotate': labels_layer.rotate,
+         'affine': labels_layer.affine,
+        },
         'surface'
     )
 
@@ -127,5 +142,10 @@ def watershed_widget(
         skimage.segmentation.watershed(
             image = sign * image_layer.data, markers=label_layer.data,
             mask=mask_layer.data, watershed_line=watershed_lines),
-        {'name': f'{label_layer.name}_watershed'},
+        {'name': f'{label_layer.name}_watershed',
+         'scale': label_layer.scale,
+         'translate': label_layer.translate,
+         'rotate': label_layer.rotate,
+         'affine': label_layer.affine,
+        },
         'labels')
