@@ -11,13 +11,13 @@ from napari.layers import Image, Labels
 from napari.utils.notifications import show_info, show_warning
 from qtpy.QtCore import Qt
 from skimage.measure import regionprops_table
-from skimage.measure._regionprops import PROPS, _require_intensity_image
+from skimage.measure._regionprops import COL_DTYPES, _require_intensity_image
 
 if TYPE_CHECKING:
     from magicgui.widgets import Widget
 
 # Get the list of available properties for RegionProperties
-available_properties = set(PROPS.values())
+available_properties = set(COL_DTYPES.keys())
 
 # Hard-code the properties that are only valid for 2D images
 only_2d_properties = {
