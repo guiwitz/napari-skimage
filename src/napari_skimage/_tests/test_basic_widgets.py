@@ -74,19 +74,43 @@ def test_binary_morphology_widget(make_napari_viewer):
         filtered, _, _ = my_widget(viewer.layers[0])
         assert filtered.data.shape == random_image.shape
 
-def test_morphology_widget(make_napari_viewer):
+@pytest.mark.parametrize('layer_type', ['image', 'labels'])
+def test_morphology_widget(make_napari_viewer, layer_type):
     viewer = make_napari_viewer()
     random_image = np.random.randint(0, 10, (100, 100), dtype=np.uint8)
-    layer = viewer.add_image(random_image)
+    layer = getattr(viewer, f'add_{layer_type}')(random_image)
 
     # our widget will be a MagicFactory or FunctionGui instance
     my_widget = morphology_widget()
+    viewer.window.add_dock_widget(my_widget)
+    assert layer in my_widget.label_layer.choices
     
     for choice in my_widget.method.choices:
         my_widget.method.native.setCurrentText(choice)
 
-        filtered, _, _ = my_widget(viewer.layers[0])
-        assert filtered.data.shape == random_image.shape
+        filtered, _, result_type = my_widget()
+        assert filtered.shape == random_image.shape
+        assert result_type == layer_type
+
+
+def test_morphology_widget_empty_viewer(make_napari_viewer):
+    viewer = make_napari_viewer()
+    my_widget = morphology_widget()
+    viewer.window.add_dock_widget(my_widget)
+    assert my_widget.label_layer.value is None
+    assert not my_widget.footprint.choices
+
+    viewer.add_shapes()
+    assert my_widget.label_layer.value is None
+
+    layer = viewer.add_image(np.zeros((5, 5)))
+    assert layer in my_widget.label_layer.choices
+    my_widget.label_layer.value = layer
+    assert 'disk' in my_widget.footprint.choices
+
+    labels = viewer.add_labels(np.zeros((3, 5, 5), dtype=np.uint8))
+    my_widget.label_layer.value = labels
+    assert my_widget.footprint.choices == ('ball', 'cube')
 
 
 def test_remove_small_objects_widget(make_napari_viewer):
