@@ -1,10 +1,11 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 from magicgui import magic_factory
 from magicgui.widgets import Label
 from qtpy.QtCore import Qt
 import skimage.morphology as sm
 from napari.layers import Image, Labels
+from napari.utils._magicgui import find_viewer_ancestor
 import napari.types
 
 
@@ -16,6 +17,13 @@ images. Options are provided to define the footprint shape and size. Links to sk
 provided via the _on_init function which first checks if the widget is for binary or grey scale images
 and then creates the appropriate link.
 """
+
+def _image_or_labels_choices(widget):
+    viewer = find_viewer_ancestor(widget.native)
+    if viewer is None:
+        return []
+    return [layer for layer in viewer.layers if isinstance(layer, (Image, Labels))]
+
 
 def _on_init(widget):
     label_widget = Label(value='')   
@@ -95,7 +103,7 @@ def binary_morphology_widget(
         'labels')
 
 @magic_factory(
-    label_layer={'label': 'Image' or 'Labels'},
+    label_layer={'label': 'Image or Labels', 'choices': _image_or_labels_choices},
     method={'choices': ['erosion', 'dilation', 'opening', 'closing',
                         'white_tophat', 'black_tophat']},
     footprint={'label': 'Footprint', 'choices': ['disk', 'square', 
@@ -107,7 +115,7 @@ def binary_morphology_widget(
     widget_init=_on_init_morphology
 )
 def morphology_widget(
-    label_layer: Image,
+    label_layer: Union[Image, Labels],
     method = "erosion",
     footprint = "disk",
     footprint_size = 3,
