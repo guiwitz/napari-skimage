@@ -38,7 +38,7 @@ testing = [
     "pytest-cov",  # https://pytest-cov.readthedocs.io/en/latest/
     "pytest-qt",  # https://pytest-qt.readthedocs.io/en/latest/
     "napari",
-    "pyqt5",
+    "pyqt6",
 ]
 
 [project.entry-points."napari.manifest"]
