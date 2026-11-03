@@ -279,6 +279,9 @@ class RankFilterWidget(Container):
 
         self.stat.changed.connect(self._on_choose_stat)
         self._on_choose_stat()
+        self._update_footprint_choices()
+        self._image_layer_combo.changed.connect(self._update_footprint_choices)
+        
 
     def _on_choose_stat(self, event=None):
         if self.stat.value in ['mean_percentile', 'subtract_mean_percentile', 'sum_percentile',
@@ -314,3 +317,15 @@ class RankFilterWidget(Container):
             rotate=image_layer.rotate,
             colormap="gray",
         )
+
+    def _update_footprint_choices(self):
+        image_layer = self._image_layer_combo.value
+        if image_layer is None:
+            self.footprint._default_choices = []
+        elif image_layer.data.ndim == 2:
+            self.footprint._default_choices = ['disk', 'square', 'diamond', 'star', 'octagon']
+        elif image_layer.data.ndim == 3:
+            self.footprint._default_choices = ['ball']
+        else:
+            self.footprint._default_choices = []
+        self.footprint.reset_choices()

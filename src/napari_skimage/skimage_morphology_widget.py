@@ -35,7 +35,24 @@ def _on_init(widget):
     widget.extend([label_widget])
 
     widget.method.changed.connect(lambda x: setattr(label_widget, 'value', f'<a href=\"https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.{get_func_name(widget)}\">skimage.morphology.{get_func_name(widget)}</a>'))
- 
+
+def _on_init_morphology(widget):
+    _on_init(widget)
+    def update_properties_choices(event: object) -> None:
+        if widget.label_layer.value is None:
+            widget.footprint._default_choices = []
+        elif widget.label_layer.value.data.ndim == 2:
+            widget.footprint._default_choices = ['disk', 'square', 'diamond', 'star', 'octagon']
+        elif widget.label_layer.value.data.ndim == 3:
+            widget.footprint._default_choices = ['ball', 'cube']
+        else:
+            widget.footprint._default_choices = []
+        widget.footprint.reset_choices()
+
+    widget.label_layer.changed.connect(update_properties_choices)
+    update_properties_choices(widget)
+
+
 @magic_factory(
     label_layer={'label': 'Labels'},
     method={'choices': ['erosion', 'dilation', 'opening', 'closing']},
@@ -45,7 +62,7 @@ def _on_init(widget):
     # to add for skimage 0.23
     #mode = {'choices': ['min', 'max', 'ignore']},
     call_button="Apply operation",
-    widget_init=_on_init
+    widget_init=_on_init_morphology
 )
 def binary_morphology_widget(
     label_layer: Labels,
@@ -78,7 +95,7 @@ def binary_morphology_widget(
         'labels')
 
 @magic_factory(
-    label_layer={'label': 'Image'},
+    label_layer={'label': 'Image' or 'Labels'},
     method={'choices': ['erosion', 'dilation', 'opening', 'closing',
                         'white_tophat', 'black_tophat']},
     footprint={'label': 'Footprint', 'choices': ['disk', 'square', 
@@ -87,7 +104,7 @@ def binary_morphology_widget(
     # to add for skimage 0.23
     # mode = {'choices': ['reflect', 'constant', 'nearest0', 'mirror', 'wrap', 'max', 'min', 'ignore']},
     call_button="Apply operation",
-    widget_init=_on_init
+    widget_init=_on_init_morphology
 )
 def morphology_widget(
     label_layer: Image,
@@ -117,7 +134,8 @@ def morphology_widget(
          'rotate': label_layer.rotate,
          'affine': label_layer.affine,
         },
-        'image')
+        'image' if isinstance(label_layer, Image) else 'labels'
+    )
 
 
 def _on_init2(widget):
